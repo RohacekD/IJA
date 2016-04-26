@@ -1,21 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ija.ija2015.homework2.board;
 
 /**
+ * Třída reprezentující aktivní pole na hrací desce.
  *
- * @author Honza
+ * @author xpavlu08, xjelin42
  */
-public class BoardField implements Field{
+public class BoardField implements Field {
 
-    private int row;
-    private int cols;
+    private final int row;
+    private final int cols;
     private Disk disk;
-    private Field[] surrounding;
-    
+    private final Field[] surrounding;
+
+    /**
+     * Inicializuje pole.
+     *
+     * @param row
+     * @param cols
+     */
     public BoardField(int row, int cols) {
         this.row = row;
         this.cols = cols;
@@ -27,99 +29,69 @@ public class BoardField implements Field{
         }
     }
 
+    /**
+     * Vygeneruje textovou reprezentaci herního pole.
+     *
+     * @return Textová reprezentace pole.
+     */
     @Override
     public String toString() {
         String tmp;
-        tmp =  "Row:" + this.row + ", column:" + this.cols + ", disk:" + this.disk + "\n";
+        tmp = "Row:" + this.row + ", column:" + this.cols + ", disk:" + this.disk + "\n";
         for (int i = 0; i < 8; i++) {
-            tmp = tmp + i +". " + surrounding[i] + "\n";
+            tmp = tmp + i + ". " + surrounding[i] + "\n";
         }
         return tmp;
     }
-    
+
+    /**
+     * Přidá sousední pole field v daném směru dirs.
+     *
+     * @param dirs Směr ve kterém se přidává pole.
+     * @param field Přidávané pole.
+     */
     @Override
-    public void addNextField(Direction dirs, Field field) {
-        switch (dirs)
-        {
-            case D:
-                surrounding[0] = field;
-                break;
-            
-            case L:
-                surrounding[1] = field;
-                break;
-                
-            case LD:
-                surrounding[2] = field;
-                break;
-                
-            case LU:
-                surrounding[3] = field;
-                break;
-                
-            case R:
-                surrounding[4] = field;
-                break;
-                
-            case RD:
-                surrounding[5] = field;
-                break;
-                
-            case RU:
-                surrounding[6] = field;
-                break;
-                
-            case U:
-                surrounding[7] = field;
-                break;
-        }
+    public void addNextField(Field.Direction dirs, Field field) {
+        surrounding[dirs.ordinal()] = field;
     }
 
+    /**
+     * Vrátí sousední pole v daném směru dirs.
+     *
+     * @param dirs Směr ve kterém se přidává pole.
+     * @return Sousední pole v daném směru dirs.
+     */
     @Override
-    public Field nextField(Direction dirs) {
-        switch (dirs)
-        {
-            case D:
-                return surrounding[0];
-            
-            case L:
-                return surrounding[1];
-                
-            case LD:
-                return surrounding[2];
-                
-            case LU:
-                return surrounding[3];
-                
-            case R:
-                return surrounding[4];
-                
-            case RD:
-                return surrounding[5];
-                
-            case RU:
-                return surrounding[6];
-                
-            case U:
-                return surrounding[7];
-        }
-        return null;
+    public Field nextField(Field.Direction dirs) {
+        return surrounding[dirs.ordinal()];
     }
 
+    /**
+     * Vloží na pole kámen. Jednou vložený kámen již nelze odebrat.
+     *
+     * @param disk Vkládaný kámen.
+     * @return Vrací úspěšnost akce. Pokud je pole již obsazeno, vrací false.
+     */
     @Override
     public boolean putDisk(Disk disk) {
         if (this.disk == null) {
             this.disk = disk;
             return true;
+        } else {
+            return false;
         }
-        else return false;
     }
 
+    /**
+     * Vrací kámen, který je vložen na pole.
+     *
+     * @return Vložený kámen. Pokud je pole prázdné, vrací null.
+     */
     @Override
     public Disk getDisk() {
         return this.disk;
     }
-    
+
     @Override
     public boolean equals(java.lang.Object obj) {
         if (obj instanceof BoardField) {
@@ -127,12 +99,15 @@ public class BoardField implements Field{
             if (this.row == tmp.row && this.cols == tmp.cols) {
                 if (this.disk == null) {
                     return tmp.disk == null;
-                }
-                else {
+                } else {
                     return this.disk.equals(tmp);
                 }
-            } else return false;
-        } else return false;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -143,14 +118,25 @@ public class BoardField implements Field{
         return hash;
     }
 
+    /**
+     * Test, zda je možné vložit na pole kámen.
+     *
+     * @param disk Vkládaný kámen.
+     * @return Vrací úspěšnost akce.
+     */
     @Override
     public boolean canPutDisk(Disk disk) {
         return true;
     }
 
+    /**
+     * Test, zda je pole prázdné.
+     *
+     * @return Vrací zda je pole prázdné
+     */
     @Override
     public boolean isEmpty() {
-        return this.disk == null; 
+        return this.disk == null;
     }
 
 }

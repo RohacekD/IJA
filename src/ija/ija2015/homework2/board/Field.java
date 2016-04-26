@@ -1,30 +1,65 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ija.ija2015.homework2.board;
 
 /**
+ * Rozhraní k polím, které lze umístit na hrací desku. Pole zná své okolí, tj.
+ * pole, která ho obklopují ve všech osmi směrech.
  *
- * @author Honza
+ * @author xpavlu08, xjelin42
  */
 public interface Field {
+
+    /**
+     * Přidá sousední pole field v daném směru dirs.
+     *
+     * @param dirs Směr ve kterém se přidává pole.
+     * @param field Přidávané pole.
+     */
     void addNextField(Field.Direction dirs, Field field);
+
+    /**
+     * Vrátí sousední pole v daném směru dirs.
+     *
+     * @param dirs Směr ve kterém se přidává pole.
+     * @return Sousední pole v daném směru dirs.
+     */
     Field nextField(Field.Direction dirs);
+
+    /**
+     * Vloží na pole kámen. Jednou vložený kámen již nelze odebrat.
+     *
+     * @param disk Vkládaný kámen.
+     * @return Vrací úspěšnost akce. Pokud je pole již obsazeno, vrací false.
+     */
     boolean putDisk(Disk disk);
+
+    /**
+     * Test, zda je možné vložit na pole kámen
+     *
+     * @param disk Vkládaný kámen.
+     * @return Vrací úspěšnost akce.
+     */
     boolean canPutDisk(Disk disk);
+
+    /**
+     * Vrací kámen, který je vložen na pole.
+     *
+     * @return Vložený kámen. Pokud je pole prázdné, vrací null.
+     */
     Disk getDisk();
+
+    /**
+     * Vrací informaci o tom, zda je pole prázdné.
+     *
+     * @return
+     */
     boolean isEmpty();
-    
+
+    /**
+     * Výčtový typ reprezentující okolí (směry) jednotlivých polí.
+     */
     public static enum Direction {
-        D,
-        L,
-        LD,
-        LU,
-        R,
-        RD,
-        RU,
-        U;
+
+        LU, U, RU, R, RD, D, LD, L;
+
     }
 }

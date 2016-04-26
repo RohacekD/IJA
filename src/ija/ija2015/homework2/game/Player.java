@@ -1,28 +1,34 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ija.ija2015.homework2.game;
+
 import ija.ija2015.homework2.board.Board;
 import ija.ija2015.homework2.board.Disk;
 import ija.ija2015.homework2.board.Field;
 import java.util.ArrayList;
 
 /**
+ * Reprezentuje hráče hry. Hráč má bílou nebo černou barvu. Po vytvoření
+ * reprezentuje volného hráče. Součástí hráče je sada kamenů, které má k
+ * dispozici pro vkládání na desku. Volný hráč musí být inicializován v rámci
+ * hrací desky.
  *
- * @author Honza
+ * @author xpavlu08, xjelin42
  */
 public class Player {
-    private boolean white;
+
+    private final boolean white;
     private Disk[] pool;
     private int takenFromPool;
     private int countOfDisk;
     private boolean initialized;
-    private ArrayList<Disk> toTurnOver;
+    private final ArrayList<Disk> toTurnOver;
     private boolean alreadyChecked;
-    
-    public Player (boolean isWhite) {
+
+    /**
+     * Inicializuje hru.
+     *
+     * @param isWhite Určuje barvu hráče (true = bílý, false = černý)
+     */
+    public Player(boolean isWhite) {
         this.white = isWhite;
         pool = null;
         takenFromPool = 0;
@@ -31,50 +37,59 @@ public class Player {
         initialized = false;
         alreadyChecked = false;
     }
-    
+
+    /**
+     * Test barvy hráče.
+     *
+     * @return Zda je hráč bílý.
+     */
     public boolean isWhite() {
         return this.white;
     }
-    
+
+    /**
+     * Test, zda je možné vložit nový kámen hráče na dané pole. Kámen se sady
+     * nevybírá ani nevkládá na pole.
+     *
+     * @param field Pole, na které se má vkládat kámen.
+     * @return Zda je možné kámen vložit.
+     */
     public boolean canPutDisk(Field field) {
         Field.Direction chosenWay;
         Field tmp2;
         boolean result = false;
-        int removeFromIndex=0;
+        int removeFromIndex = 0;
 
-        
         if (initialized == false) {
-            if (field.isEmpty()==true)  {
-                if (takenFromPool < countOfDisk)
+            if (field.isEmpty() == true) {
+                if (takenFromPool < countOfDisk) {
                     return true;
+                }
             }
-        }
-        else {
+        } else {
             if (field.isEmpty()) {
                 for (Field.Direction dir : Field.Direction.values()) {
                     if (field.nextField(dir).isEmpty() || field.nextField(dir).getDisk() == null
                             || field.nextField(dir).getDisk().isWhite() == this.white) {
-                        continue;
-                    }
-                    else {
+                    } else {
                         chosenWay = dir;
                         boolean result_tmp = false;
                         tmp2 = field.nextField(chosenWay);
                         toTurnOver.add(tmp2.getDisk());
 
-                        while(!tmp2.nextField(chosenWay).isEmpty() && tmp2.nextField(chosenWay).canPutDisk(null) != false) {
+                        while (!tmp2.nextField(chosenWay).isEmpty() && tmp2.nextField(chosenWay).canPutDisk(null) != false) {
                             if (tmp2.nextField(chosenWay).getDisk().isWhite() == this.white) {
                                 result = true;
                                 removeFromIndex = toTurnOver.size();
                                 break;
-                            }
-                            else {
+                            } else {
                                 tmp2 = tmp2.nextField(chosenWay);
                                 toTurnOver.add(tmp2.getDisk());
                             }
                         }
-                        if (result_tmp == false)
+                        if (result_tmp == false) {
                             toTurnOver.subList(removeFromIndex, toTurnOver.size()).clear();
+                        }
                     }
                 }
             }
@@ -82,14 +97,23 @@ public class Player {
         alreadyChecked = true;
         return result;
     }
-    
+
+    /**
+     * Test prázdnosti sady kamenů, které má hráč k dispozici.
+     *
+     * @return Zda je sada prázdná.
+     */
     public boolean emptyPool() {
-        if (this.pool == null) {
-            return true;
-        }
-        return false;
+        return this.pool == null;
     }
-    
+
+    /**
+     * Vloží nový kámen hráče na dané pole, pokud to pravidla umožňují. Pokud
+     * lze vložit, vybere kámen ze sady a vloží na pole.
+     *
+     * @param field Pole, na které se vkládá kámen.
+     * @return Úspěch akce.
+     */
     public boolean putDisk(Field field) {
         if (alreadyChecked == true) {
             field.putDisk(pool[takenFromPool]);
@@ -101,7 +125,7 @@ public class Player {
                 toTurnOver.clear();
             }
             return true;
-        }else if (canPutDisk(field)) {
+        } else if (canPutDisk(field)) {
             field.putDisk(pool[takenFromPool]);
             takenFromPool++;
             if (toTurnOver != null && !toTurnOver.isEmpty()) {
@@ -111,40 +135,43 @@ public class Player {
                 toTurnOver.clear();
             }
             return true;
-        }        
+        }
         return false;
     }
-    
+
+    /**
+     * Inicializace hráče v rámci hrací desky. Vytvoří sadu kamenů o příslušné
+     * velikosti a umístí své počáteční kameny na desku.
+     *
+     * @param board Deska, v rámci které se hráč inicializuje.
+     */
     public void init(Board board) {
         int countOfDisks = board.getRules().numberDisks();
-        int firstWhite = board.getSize()/2;
+        int firstWhite = board.getSize() / 2;
         Field tmp;
         this.countOfDisk = countOfDisks;
         this.pool = new Disk[countOfDisks];
-        
-        
+
         for (int i = 0; i < countOfDisks; i++) {
             if (white) {
                 this.pool[i] = new Disk(true);
-            }
-            else {
+            } else {
                 this.pool[i] = new Disk(false);
             }
         }
-        
+
         if (white) {
             tmp = board.getField(firstWhite, firstWhite);
             putDisk(tmp);
-            tmp = board.getField(firstWhite+1, firstWhite+1);
+            tmp = board.getField(firstWhite + 1, firstWhite + 1);
+            putDisk(tmp);
+        } else {
+            tmp = board.getField(firstWhite, firstWhite + 1);
+            putDisk(tmp);
+            tmp = board.getField(firstWhite + 1, firstWhite);
             putDisk(tmp);
         }
-        else {
-            tmp = board.getField(firstWhite, firstWhite+1);
-            putDisk(tmp);
-            tmp = board.getField(firstWhite+1, firstWhite);
-            putDisk(tmp);
-        }
-        
+
         initialized = true;
     }
 
@@ -152,6 +179,5 @@ public class Player {
     public String toString() {
         return this.white == true ? "white" : "black";
     }
-    
-    
+
 }
