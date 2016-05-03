@@ -70,6 +70,15 @@ public class Board {
     }
 
     /**
+     * Vrací 2D pole herních polí.
+     *
+     * @return Pole všech herních polí.
+     */
+    public Field[][] getDesk() {
+        return desk;
+    }
+
+    /**
      * Generuje textový formát hrací desky.
      *
      * @return Textový formát hrací desky.
@@ -82,15 +91,15 @@ public class Board {
         for (int i = 0; i < size + 2; i++) {
             for (int j = 0; j < size + 2; j++) {
                 if (i == 0 || i == size + 1) {
-                    result += (j + "\t");
+                    result += (j + " ");
                 } else if (j == 0 || j == size + 1) {
-                    result += (i + "\t");
+                    result += (i + " ");
                 } else if (this.getField(i, j).isEmpty()) {
-                    result += "X\t";
+                    result += "- ";
                 } else if (this.getField(i, j).getDisk().isWhite()) {
-                    result += "W\t";
+                    result += "☻ ";
                 } else {
-                    result += "B\t";
+                    result += "☺ ";
                 }
             }
             result += '\n';

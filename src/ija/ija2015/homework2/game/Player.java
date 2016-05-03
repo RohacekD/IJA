@@ -13,18 +13,18 @@ import java.util.ArrayList;
  *
  * @author xpavlu08, xjelin42
  */
-public class Player {
-
-    private final boolean white;
-    private Disk[] pool;
-    private int takenFromPool;
-    private int countOfDisk;
-    private boolean initialized;
-    private final ArrayList<Disk> toTurnOver;
-    private boolean alreadyChecked;
+public abstract class Player {
+    protected ArrayList<Field> legals;
+    protected final boolean white;
+    protected Disk[] pool;
+    protected int takenFromPool;
+    protected int countOfDisk;
+    protected boolean initialized;
+    protected final ArrayList<Disk> toTurnOver;
+    protected boolean alreadyChecked;
 
     /**
-     * Inicializuje hru.
+     * Inicializuje hráče.
      *
      * @param isWhite Určuje barvu hráče (true = bílý, false = černý)
      */
@@ -36,6 +36,7 @@ public class Player {
         toTurnOver = new ArrayList<>();
         initialized = false;
         alreadyChecked = false;
+        legals = new ArrayList<>();
     }
 
     /**
@@ -97,6 +98,25 @@ public class Player {
         alreadyChecked = true;
         return result;
     }
+    
+    /**
+     * Vratí ArrayList všech polí kam tento hráč může táhnout.
+     * @param board Hrací deska.
+     * @return ArrayList všech polí kam tento hráč může táhnout.
+     */
+    public ArrayList<Field> getLegals(Board board){
+        ArrayList<Field> legals = new ArrayList<>();
+        Field fields[][] = board.getDesk();
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j < board.getSize() + 1; j++) {
+                if(this.canPutDisk(fields[i][j])){
+                    legals.add(fields[i][j]);
+                }
+            }
+        }
+        this.legals = legals;
+        return legals;
+    }
 
     /**
      * Test prázdnosti sady kamenů, které má hráč k dispozici.
@@ -138,6 +158,8 @@ public class Player {
         }
         return false;
     }
+    
+    public abstract boolean putDisk(Board board);
 
     /**
      * Inicializace hráče v rámci hrací desky. Vytvoří sadu kamenů o příslušné
@@ -174,10 +196,23 @@ public class Player {
 
         initialized = true;
     }
+    
+    public abstract Ai getInteligence();
 
     @Override
     public String toString() {
-        return this.white == true ? "white" : "black";
+        String tmp = "";
+        for (Field i : legals) {
+            tmp +=i.toString()+ " ";
+        }
+        return this.white == true ? "white|" + tmp  : "black|" + tmp; 
+
     }
+    
+    public static enum Ai {
+
+        rand, minMax, human;
+    }
+    
 
 }

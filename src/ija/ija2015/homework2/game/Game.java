@@ -8,11 +8,12 @@ import ija.ija2015.homework2.board.Board;
  * @author xpavlu08, xjelin42
  */
 public class Game {
-
     private final Board board;
     private Player whitePlayer;
     private Player blackPlayer;
     private Player currentPlayer;
+    private boolean otherCantPlay;
+    private boolean ended;
 
     /**
      * Inicializuje hru.
@@ -24,6 +25,8 @@ public class Game {
         this.whitePlayer = null;
         this.blackPlayer = null;
         this.currentPlayer = null;
+        this.otherCantPlay = false;
+        this.ended = false;
     }
 
     /**
@@ -82,4 +85,20 @@ public class Game {
         return this.board;
     }
 
+    public boolean isOtherCantPlay() {
+        return otherCantPlay;
+    }
+
+    public void setOtherCantPlay(boolean otherCantPlay) {
+        this.otherCantPlay = otherCantPlay;
+    }
+
+    public boolean isEnded() {
+        return ended;
+    }
+
+    public void setEnded(boolean ended) {
+        this.ended = ended;
+    }
+    
 }

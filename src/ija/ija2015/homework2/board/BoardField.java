@@ -37,10 +37,7 @@ public class BoardField implements Field {
     @Override
     public String toString() {
         String tmp;
-        tmp = "Row:" + this.row + ", column:" + this.cols + ", disk:" + this.disk + "\n";
-        for (int i = 0; i < 8; i++) {
-            tmp = tmp + i + ". " + surrounding[i] + "\n";
-        }
+        tmp = "<" + this.row + "," + this.cols + ", disk:" + this.disk + ">";
         return tmp;
     }
 
@@ -138,5 +135,5 @@ public class BoardField implements Field {
     public boolean isEmpty() {
         return this.disk == null;
     }
-
+    
 }
