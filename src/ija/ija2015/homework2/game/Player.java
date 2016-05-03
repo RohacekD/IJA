@@ -101,15 +101,17 @@ public abstract class Player {
     }
     
     /**
-     * Vratí ArrayList všech polí kam tento hráč může táhnout.
+     * Vratí ArrayList všech polí kam tento hráč může táhnout a nastaví aktuální
+     * počet bílých a černých disků na hracím poli.
      * @param board Hrací deska.
      * @return ArrayList všech polí kam tento hráč může táhnout.
      */
     public ArrayList<Field> getLegals(Board board){
+
         ArrayList<Field> legals = new ArrayList<>();
         Field fields[][] = board.getDesk();
-        for (int i = 0; i < board.getSize() + 1; i++) {
-            for (int j = 0; j < board.getSize() + 1; j++) {
+        for (int i = 1; i < board.getSize() + 1; i++) {
+            for (int j = 1; j < board.getSize() + 1; j++) {
                 if(this.canPutDisk(fields[i][j])){
                     legals.add(fields[i][j]);
                 }
@@ -137,8 +139,9 @@ public abstract class Player {
      */
     public boolean putDisk(Field field) {
         if (alreadyChecked == true) {
+            if(takenFromPool>= countOfDisk) return false;
             field.putDisk(pool[takenFromPool]);
-            System.out.println("Pokladam kamen cislo:" + takenFromPool);
+            System.out.println("pokladam: "+takenFromPool);
             takenFromPool++;
             if (toTurnOver != null && !toTurnOver.isEmpty()) {
                 for (Disk tmp : toTurnOver) {
@@ -148,8 +151,9 @@ public abstract class Player {
             }
             return true;
         } else if (canPutDisk(field)) {
+            System.out.println("pokladam: "+takenFromPool);
+            if(takenFromPool>= countOfDisk) return false;
             field.putDisk(pool[takenFromPool]);
-            System.out.println("Pokladam kamen cislo:" + takenFromPool);
             takenFromPool++;
             if (toTurnOver != null && !toTurnOver.isEmpty()) {
                 for (Disk tmp : toTurnOver) {

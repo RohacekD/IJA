@@ -13,6 +13,7 @@ public class Board {
     private final Field[][] desk;
     private final Rules rules;
 
+
     /**
      * Inicializuje desku.
      *
@@ -106,6 +107,21 @@ public class Board {
         }
         System.out.println(result);
         return result;
+    }
+    
+    public int[] score(){
+        int w, b;
+        w = b = 0;
+        for (int i = 1; i < this.getSize()+1; i++) {
+            for (int j = 1; j < this.getSize()+1; j++) {
+                if(!this.desk[i][j].isEmpty())
+                    if(this.desk[i][j].getDisk().isWhite()) w++;
+                    else b++;
+            }
+            
+        }
+        int tmp[] = {w,b};
+        return tmp;
     }
 
 }
