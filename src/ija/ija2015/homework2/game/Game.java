@@ -1,8 +1,9 @@
 package ija.ija2015.homework2.game;
 import ija.ija2015.homework2.board.Board;
-import ija.ija2015.homework2.board.Field;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -15,6 +16,9 @@ public class Game implements Serializable{
     private Player whitePlayer;
     private Player blackPlayer;
     private Player currentPlayer;
+    private boolean otherCantPlay = true;
+    private boolean ended = false;
+    private int counts[] = new int[2];
 
     /**
      * Inicializuje hru.
@@ -75,11 +79,26 @@ public class Game implements Serializable{
         return this.currentPlayer;
     }
     
+    public boolean writeToFile(String name) {
+        try {
+            File dir = new File("saves");
+            dir.mkdir();
+
+            FileOutputStream fout = new FileOutputStream("./saves/" + name);
+            ObjectOutputStream oos = new ObjectOutputStream(fout);
+            oos.writeObject(this);
+            oos.close();
+            System.out.println("Done");
+            return true;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
     public void play() {
         Scanner sc = new Scanner(System.in);
-        boolean otherCantPlay = true;
-        boolean ended = false;
-        int counts[] = new int[2];
         while (!ended) {
             if (this.currentPlayer().getInteligence() == Player.Ai.human) { //clovek
                 int x, y;
@@ -109,6 +128,9 @@ public class Game implements Serializable{
                         System.out.println("tahne: " + this.currentPlayer().toString());
                         System.out.println("Zadej X a pak Y");
                         x = sc.nextInt();
+                        if(x==100){
+                            this.writeToFile("save.sv");
+                        }
                         y = sc.nextInt();
                         ok = true;
                     }

@@ -3,6 +3,7 @@ package ija.ija2015.homework2.game;
 import ija.ija2015.homework2.board.Board;
 import ija.ija2015.homework2.board.Disk;
 import ija.ija2015.homework2.board.Field;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author xpavlu08, xjelin42
  */
-public abstract class Player {
+public abstract class Player implements Serializable{
     protected ArrayList<Field> legals;
     protected final boolean white;
     protected Disk[] pool;

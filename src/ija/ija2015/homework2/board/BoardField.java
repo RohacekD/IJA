@@ -1,11 +1,13 @@
 package ija.ija2015.homework2.board;
 
+import java.io.Serializable;
+
 /**
  * Třída reprezentující aktivní pole na hrací desce.
  *
  * @author xpavlu08, xjelin42
  */
-public class BoardField implements Field {
+public class BoardField implements Field, Serializable {
 
     private final int row;
     private final int cols;

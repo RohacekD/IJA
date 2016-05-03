@@ -1,5 +1,7 @@
 package ija.ija2015.homework2.board;
 
+import java.io.Serializable;
+
 /**
  * Třída reprezentující hrací desku. Deska má velikost (rozměr) N a rozlišuje
  * aktivní a neaktivní pole. Aktivní pole jsou umístěna na řádcích a sloupcích,
@@ -8,7 +10,7 @@ package ija.ija2015.homework2.board;
  *
  * @author xpavlu08, xjelin42
  */
-public class Board {
+public class Board implements Serializable{
 
     private final Field[][] desk;
     private final Rules rules;

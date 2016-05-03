@@ -12,12 +12,9 @@ import ija.ija2015.homework2.game.Game;
 import ija.ija2015.homework2.game.Player;
 import ija.ija2015.homework2.game.Player.Ai;
 import ija.ija2015.homework2.game.ReversiRules;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 /**
@@ -26,33 +23,35 @@ import java.util.Scanner;
  */
 public class Reversi {
 
+    public static Game createNewGame(int size, Ai p1Ai, Ai p2Ai) {
 
-    /**
-     * 
-     * @param game
-     * @param name
-     * @return 
-     */
-    public boolean writeToFile(Game game, String name) {
-        try {
-            File dir = new File("saves");
-            dir.mkdir();
+        Player p1, p2;
+        ReversiRules rules = new ReversiRules(size);
+        Board board = new Board(rules);
+        Game game = new Game(board);
 
-            FileOutputStream fout = new FileOutputStream("./saves/" + name);
-            ObjectOutputStream oos = new ObjectOutputStream(fout);
-            oos.writeObject(game);
-            oos.close();
-            System.out.println("Done");
-            return true;
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
+        if (p1Ai == Ai.human) {
+            p1 = new HumanPlayer(true);
+        } else {
+            p1 = new AiPlayer(true, p1Ai);
         }
+
+        if (p2Ai == Ai.human) {
+            p2 = new HumanPlayer(false);
+        } else {
+            p2 = new AiPlayer(false, p1Ai);
+        }
+
+        game.addPlayer(p1);
+        game.addPlayer(p2);
+
+        board.toString();
+
+        return game;
     }
 
-    public Game loadFromFile(String name){
-        Game game = null;
+        public static Game loadFromFile(String name){
+        Game game;
         try {
 
             FileInputStream fin = new FileInputStream("./saves/"+ name);
@@ -67,37 +66,15 @@ public class Reversi {
             return null;
         }
     }
-    
-    public static Game createNewGame(int size,Ai p1Ai, Ai p2Ai){
-        
-        Player p1, p2;
-        ReversiRules rules = new ReversiRules(size);
-        Board board = new Board(rules);
-        Game game = new Game(board);
-    
-        if(p1Ai == Ai.human) p1 = new HumanPlayer(true);
-        else p1 = new AiPlayer(true, p1Ai);
-        
-        if(p2Ai == Ai.human) p2 = new HumanPlayer(false);
-        else p2 = new AiPlayer(false, p1Ai);
-        
-        game.addPlayer(p1);
-        game.addPlayer(p2);
-        
-        board.toString();
-        
-        return game;
-    }
-        
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Zadejte AI|HI a pote B|W");
 
-        Game game = createNewGame(3,Ai.human,Ai.rand);
+        //Game game = createNewGame(3, Ai.human, Ai.rand);
         
+        Game game = loadFromFile("save.sv");
+
         game.play();
-        
 
     }
 
