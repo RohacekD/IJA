@@ -22,7 +22,9 @@ public class AiPlayer extends Player {
         switch (aiType){
             case rand:
                 tmp = ArtificialIntelligence.randomAI(board, this);
-                if(tmp != null) return putDisk(tmp);
+                if(tmp != null) 
+                    if (canPutDisk(tmp))
+                    return putDisk(tmp);
                 else return false;
             case minMax:
                 tmp = ArtificialIntelligence.minMaxAI(board, this);

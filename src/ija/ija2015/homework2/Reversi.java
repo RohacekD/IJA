@@ -80,7 +80,7 @@ public class Reversi {
 
        // Player p1 = initPlayer();
        // Player p2 = initPlayer();
-        Player p1 = new HumanPlayer(true);
+        Player p1 = new AiPlayer(true, Ai.rand);
         Player p2 = new AiPlayer(false,Ai.rand);
         
 

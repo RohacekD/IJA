@@ -60,6 +60,7 @@ public abstract class Player {
         Field tmp2;
         boolean result = false;
         int removeFromIndex = 0;
+        toTurnOver.clear();
 
         if (initialized == false) {
             if (field.isEmpty() == true) {
@@ -107,7 +108,7 @@ public abstract class Player {
     public ArrayList<Field> getLegals(Board board){
         ArrayList<Field> legals = new ArrayList<>();
         Field fields[][] = board.getDesk();
-        for (int i = 0; i < board.getSize(); i++) {
+        for (int i = 0; i < board.getSize() + 1; i++) {
             for (int j = 0; j < board.getSize() + 1; j++) {
                 if(this.canPutDisk(fields[i][j])){
                     legals.add(fields[i][j]);
