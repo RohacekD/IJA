@@ -138,6 +138,7 @@ public abstract class Player {
     public boolean putDisk(Field field) {
         if (alreadyChecked == true) {
             field.putDisk(pool[takenFromPool]);
+            System.out.println("Pokladam kamen cislo:" + takenFromPool);
             takenFromPool++;
             if (toTurnOver != null && !toTurnOver.isEmpty()) {
                 for (Disk tmp : toTurnOver) {
@@ -148,6 +149,7 @@ public abstract class Player {
             return true;
         } else if (canPutDisk(field)) {
             field.putDisk(pool[takenFromPool]);
+            System.out.println("Pokladam kamen cislo:" + takenFromPool);
             takenFromPool++;
             if (toTurnOver != null && !toTurnOver.isEmpty()) {
                 for (Disk tmp : toTurnOver) {

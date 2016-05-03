@@ -89,8 +89,8 @@ public class Reversi {
             return;
         }
 
-        p1.init(board);
-        p2.init(board);
+        //p1.init(board);
+        //p2.init(board);
 
         game.addPlayer(p1);
         game.addPlayer(p2);
