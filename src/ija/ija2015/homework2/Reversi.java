@@ -104,10 +104,14 @@ public class Reversi {
             java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         
-        java.awt.EventQueue.invokeLater(() -> {
-            JFrame main = new StartFrame();
-            main.setLocationRelativeTo(null);
-            main.setVisible(true);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+              
+             JFrame tmp =new StartFrame();
+             tmp.setLocationRelativeTo(null);
+             tmp.setVisible(true);
+            
+            }
         });
     }
     public static void main(String[] args) {

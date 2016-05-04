@@ -315,8 +315,13 @@ public class StartFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jListLoadMouseClicked
 
     private void jButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlayActionPerformed
-        Game game = Reversi.createNewGame(jSliderSize.getValue(),(Ai)jComboBoxWhite.getSelectedItem(),(Ai)jComboBoxBlack.getSelectedItem());
-        game.play();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new GameFrame(jSliderSize.getValue(),(Ai)jComboBoxWhite.getSelectedItem(),(Ai)jComboBoxWhite.getSelectedItem()).setVisible(true);
+            }
+        });
+       
     }//GEN-LAST:event_jButtonPlayActionPerformed
 
     private void jSliderSizeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderSizeStateChanged
