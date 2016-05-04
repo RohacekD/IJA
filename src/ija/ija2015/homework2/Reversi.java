@@ -12,10 +12,13 @@ import ija.ija2015.homework2.game.Game;
 import ija.ija2015.homework2.game.Player;
 import ija.ija2015.homework2.game.Player.Ai;
 import ija.ija2015.homework2.game.ReversiRules;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.JFrame;
 
 /**
  *
@@ -66,15 +69,55 @@ public class Reversi {
             return null;
         }
     }
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Zadejte AI|HI a pote B|W");
+        public static ArrayList<String> getSavedGames(){
+            ArrayList<String> result = new ArrayList<>();
+           
+            File folder = new File("saves");
+            File[] listOfFiles = folder.listFiles();
+            if (!folder.isDirectory()){
 
+                return result;
+                
+            } 
+
+            for (int i = 0; i < folder.listFiles().length; i++) {
+                    System.out.println(listOfFiles[i].getName());
+                    if(listOfFiles[i].isFile()) result.add(listOfFiles[i].getName());
+            }
+            return result;
+        }
+    public static void runMenu(){
+                  try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        
+        java.awt.EventQueue.invokeLater(() -> {
+            JFrame main = new StartFrame();
+            main.setLocationRelativeTo(null);
+            main.setVisible(true);
+        });
+    }
+    public static void main(String[] args) {
+
+        runMenu();
         //Game game = createNewGame(3, Ai.human, Ai.rand);
         
-        Game game = loadFromFile("save.sv");
+        //Game game = loadFromFile("save.sv");
 
-        game.play();
+        //game.play();
 
     }
 
