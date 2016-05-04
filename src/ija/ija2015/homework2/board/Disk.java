@@ -1,12 +1,14 @@
 package ija.ija2015.homework2.board;
 
+import java.io.Serializable;
+
 /**
  * Třída reprezentuje jeden kámen. Kámen může nabývat dvou barev - bílá nebo
  * černá.
  *
  * @author xpavlu08, xjelin42
  */
-public class Disk {
+public class Disk implements Serializable{
 
     //promenna nabyva hodnot true, pokud jde o bilou barvu
     //false znaci cernou barvu

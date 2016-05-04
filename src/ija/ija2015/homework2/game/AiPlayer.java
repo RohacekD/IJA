@@ -2,12 +2,13 @@ package ija.ija2015.homework2.game;
 
 import ija.ija2015.homework2.board.Board;
 import ija.ija2015.homework2.board.Field;
+import java.io.Serializable;
 
 /**
  *
  * @author Dalibor Jelinek
  */
-public class AiPlayer extends Player {
+public class AiPlayer extends Player implements Serializable{
 
     private final Ai aiType;
 
@@ -15,6 +16,8 @@ public class AiPlayer extends Player {
         super(isWhite);
         aiType = in;
     }
+    
+
     
     @Override
     public boolean putDisk(Board board){

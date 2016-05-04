@@ -3,6 +3,7 @@ package ija.ija2015.homework2.game;
 import ija.ija2015.homework2.board.BoardField;
 import ija.ija2015.homework2.board.Rules;
 import ija.ija2015.homework2.board.Field;
+import java.io.Serializable;
 
 /**
  * Třída implementující rozhraní Rules. Reprezentuje pravidla inicializace hry
@@ -10,7 +11,7 @@ import ija.ija2015.homework2.board.Field;
  *
  * @author xpavlu08, xjelin42
  */
-public class ReversiRules implements Rules {
+public class ReversiRules implements Rules, Serializable {
 
     private final int size;
 

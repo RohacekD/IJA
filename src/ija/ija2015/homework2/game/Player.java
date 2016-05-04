@@ -3,6 +3,7 @@ package ija.ija2015.homework2.game;
 import ija.ija2015.homework2.board.Board;
 import ija.ija2015.homework2.board.Disk;
 import ija.ija2015.homework2.board.Field;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author xpavlu08, xjelin42
  */
-public abstract class Player {
+public abstract class Player implements Serializable{
     protected ArrayList<Field> legals;
     protected final boolean white;
     protected Disk[] pool;
@@ -101,15 +102,17 @@ public abstract class Player {
     }
     
     /**
-     * Vratí ArrayList všech polí kam tento hráč může táhnout.
+     * Vratí ArrayList všech polí kam tento hráč může táhnout a nastaví aktuální
+     * počet bílých a černých disků na hracím poli.
      * @param board Hrací deska.
      * @return ArrayList všech polí kam tento hráč může táhnout.
      */
     public ArrayList<Field> getLegals(Board board){
+
         ArrayList<Field> legals = new ArrayList<>();
         Field fields[][] = board.getDesk();
-        for (int i = 0; i < board.getSize() + 1; i++) {
-            for (int j = 0; j < board.getSize() + 1; j++) {
+        for (int i = 1; i < board.getSize() + 1; i++) {
+            for (int j = 1; j < board.getSize() + 1; j++) {
                 if(this.canPutDisk(fields[i][j])){
                     legals.add(fields[i][j]);
                 }
@@ -137,8 +140,9 @@ public abstract class Player {
      */
     public boolean putDisk(Field field) {
         if (alreadyChecked == true) {
+            if(takenFromPool>= countOfDisk) return false;
             field.putDisk(pool[takenFromPool]);
-            System.out.println("Pokladam kamen cislo:" + takenFromPool);
+            System.out.println("pokladam: "+takenFromPool);
             takenFromPool++;
             if (toTurnOver != null && !toTurnOver.isEmpty()) {
                 for (Disk tmp : toTurnOver) {
@@ -148,8 +152,9 @@ public abstract class Player {
             }
             return true;
         } else if (canPutDisk(field)) {
+            System.out.println("pokladam: "+takenFromPool);
+            if(takenFromPool>= countOfDisk) return false;
             field.putDisk(pool[takenFromPool]);
-            System.out.println("Pokladam kamen cislo:" + takenFromPool);
             takenFromPool++;
             if (toTurnOver != null && !toTurnOver.isEmpty()) {
                 for (Disk tmp : toTurnOver) {

@@ -6,12 +6,13 @@
 package ija.ija2015.homework2.game;
 import ija.ija2015.homework2.board.Board;
 import static ija.ija2015.homework2.game.Player.Ai.human;
+import java.io.Serializable;
 
 /**
  *
  * @author Dalibor Jelinek
  */
-public class HumanPlayer extends Player{
+public class HumanPlayer extends Player implements Serializable{
 
     public HumanPlayer(boolean isWhite) {
         super(isWhite);

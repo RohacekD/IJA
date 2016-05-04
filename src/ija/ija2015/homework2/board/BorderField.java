@@ -1,12 +1,14 @@
 package ija.ija2015.homework2.board;
 
+import java.io.Serializable;
+
 /**
  * Třída reprezentující okrajová (neaktivní) pole desky. Pole neuchovává znalost
  * o svém okolí a nelze ne něj umístit kámen.
  *
  * @author xpavlu08, xjelin42
  */
-public class BorderField implements Field {
+public class BorderField implements Field, Serializable {
 
     /**
      * Nedělá nic.
