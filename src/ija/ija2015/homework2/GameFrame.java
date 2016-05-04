@@ -350,7 +350,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                 
             }
         }
-       // jLabelBlackLeft.setText(game.);
+       // jLabelBlackLeft.setText(game.getBlackPlayer().);
     }
     private void jButtonUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUndoActionPerformed
 

@@ -216,6 +216,15 @@ public abstract class Player implements Serializable{
         return this.white == true ? "white|" + tmp  : "black|" + tmp; 
 
     }
+
+    public int getTakenFromPool() {
+        return takenFromPool;
+    }
+
+    public ArrayList<Disk> getToTurnOver() {
+        return toTurnOver;
+    }
+    
     
     public static enum Ai {
 
