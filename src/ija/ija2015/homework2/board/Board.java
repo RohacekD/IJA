@@ -49,6 +49,34 @@ public class Board implements Serializable{
             }
         }
     }
+    
+    public Board(Board board) {
+        this.desk = new Field[board.getSize() + 2][board.getSize() + 2];
+        this.rules = board.rules;
+        
+        for (int i = 0; i < board.getSize() + 2; i++) {
+            for (int j = 0; j < board.getSize() + 2; j++) {
+                if (i == 0 || j == 0 || i == board.getSize() + 1 || j == board.getSize() + 1) {
+                    this.desk[i][j] = new BorderField();
+                } else {
+                    this.desk[i][j] = new BoardField((BoardField)board.getField(i, j));
+                }
+            }
+        }
+        
+        for (int i = 1; i < board.getSize() + 1; i++) {
+            for (int j = 1; j < board.getSize() + 1; j++) {
+                this.desk[i][j].addNextField(Field.Direction.D, desk[i + 1][j]);
+                this.desk[i][j].addNextField(Field.Direction.L, desk[i][j - 1]);
+                this.desk[i][j].addNextField(Field.Direction.LD, desk[i + 1][j - 1]);
+                this.desk[i][j].addNextField(Field.Direction.LU, desk[i - 1][j - 1]);
+                this.desk[i][j].addNextField(Field.Direction.R, desk[i][j + 1]);
+                this.desk[i][j].addNextField(Field.Direction.RD, desk[i + 1][j + 1]);
+                this.desk[i][j].addNextField(Field.Direction.RU, desk[i - 1][j + 1]);
+                this.desk[i][j].addNextField(Field.Direction.U, desk[i - 1][j]);
+            }
+        }
+    }
 
     /**
      * Vrací velikost (rozměr) desky.

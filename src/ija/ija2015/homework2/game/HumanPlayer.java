@@ -20,7 +20,7 @@ public class HumanPlayer extends Player implements Serializable{
     
 
     @Override
-    public boolean putDisk(Board board) {
+    public boolean putDisk(Game game) {
         return false;
     }
 

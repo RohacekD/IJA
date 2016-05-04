@@ -167,7 +167,7 @@ public abstract class Player implements Serializable{
         return false;
     }
     
-    public abstract boolean putDisk(Board board);
+    public abstract boolean putDisk(Game game);
 
     /**
      * Inicializace hráče v rámci hrací desky. Vytvoří sadu kamenů o příslušné
@@ -206,7 +206,7 @@ public abstract class Player implements Serializable{
     }
     
     public abstract Ai getInteligence();
-
+        
     @Override
     public String toString() {
         String tmp = "";

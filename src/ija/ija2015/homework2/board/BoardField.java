@@ -12,6 +12,7 @@ public class BoardField implements Field, Serializable {
     private final int row;
     private final int cols;
     private Disk disk;
+    private int rating;
     private final Field[] surrounding;
 
     /**
@@ -24,6 +25,19 @@ public class BoardField implements Field, Serializable {
         this.row = row;
         this.cols = cols;
         this.disk = null;
+        this.rating = 0;
+        this.surrounding = new Field[8];
+
+        for (int i = 0; i < 8; i++) {
+            this.surrounding[i] = null;
+        }
+    }
+    
+    public BoardField(BoardField field) {
+        this.row = field.row;
+        this.cols = field.cols;
+        this.disk = field.disk == null ? null : new Disk(field.disk);
+        this.rating = field.rating;
         this.surrounding = new Field[8];
 
         for (int i = 0; i < 8; i++) {
@@ -136,6 +150,26 @@ public class BoardField implements Field, Serializable {
     @Override
     public boolean isEmpty() {
         return this.disk == null;
+    }
+
+    @Override
+    public int getRating() {
+        return this.rating;
+    }
+
+    @Override
+    public void setRating(int value) {
+        this.rating = value;
+    }
+
+    @Override
+    public int getColumn() {
+        return this.cols;
+    }
+
+    @Override
+    public int getRow() {
+        return this.row;
     }
     
 }
