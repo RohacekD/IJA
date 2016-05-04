@@ -34,20 +34,62 @@ public class ArtificialIntelligence {
      * @param plr   Hráč který má udělat tah.
      * @return Nalezené vhodné pole.
      */
-    public static Field minMaxAI(Board board, Player plr) {
-        int value;
+    public static Field minMaxAI(Board board, Player plr, int depth, Game game, boolean color, boolean first) {
+        int maxDepth = 5;
+       
+        // dosahli jsme maximalni hloubky
+        if(depth >= maxDepth) return null;
+        
+        Field finalMove = null;
+        
         
         //ziskani policek, kam lze vlozit disk
         ArrayList<Field> moves = plr.getLegals(board);
         
         //prochazim pres vsechny mozne pozice
-        for (Field tmp : moves) {
+        for (Field currField : moves) {
              
-            //
+            //vytvoreni kopie desky
+            Board boardTmp = new Board(board);
+            
+            if (! putDiskAi(boardTmp, currField, plr))
+                System.out.println("VLOZENI DISKU SE NEZDARILO");;
+            
+            System.out.println("-----------DEBUGGING-----------");
+            boardTmp.toString();
+            System.out.println("-------------------------------");
+    
+            //zmena hrace
+            if (depth < 4)
+                plr = game.nextPlayer();
+            
+            //minmax pro druheho hrace
+            Field nextMove = minMaxAI(boardTmp, plr, depth + 1, game, color, false);
+            
+            //jsem v maximalni hloubce, nebo korenovem listu
+            if (nextMove == null) {
+                currField.setRating(getHeuristicValue(boardTmp, color));
+            }
+            //nejsem v korenovem listu - prepisuji hodnotu z potomka
+            else {
+                plr = game.nextPlayer();
+                currField.setRating(nextMove.getRating());
+            }
+            
+            if (finalMove == null)
+                finalMove = currField;
+            else {
+                if (depth % 2 == 0) {
+                    if (finalMove.getRating() < currField.getRating())
+                        finalMove = currField;
+                }
+                else {
+                    if (finalMove.getRating() > currField.getRating())
+                        finalMove = currField;
+                }
+            }
         }
-        
-        value = getHeuristicValue(board, plr.isWhite());
-        return null;
+        return finalMove;
     }
     
     public static boolean canMove(Field f, boolean color) {
@@ -63,7 +105,7 @@ public class ArtificialIntelligence {
             }
             else {
                 Field tmp = f.nextField(dir);
-                while (!tmp.nextField(dir).isEmpty() && !tmp.nextField(dir).canPutDisk(null)) {
+                while (!tmp.nextField(dir).isEmpty() && tmp.nextField(dir).canPutDisk(null)) {
                     if (tmp.nextField(dir).getDisk().isWhite() == color)
                         return true;
                     else
@@ -105,7 +147,11 @@ public class ArtificialIntelligence {
         int myMobility = 0; // pocet moznych pozic pro vlozeni kamene
         int oppMobility = 0; // pocet moznych pozic, kam muze vlozit kamen souper
         int mobilityRes = 0; // celkove ohodnoceni mobility
+        int result = 0;
         
+        
+        System.out.println("Board pro vyhodnoceni");
+        board.toString();
         for (int i = 1; i < board.getSize() + 1; i++) {
             for (int j = 1; j < board.getSize() + 1; j++) {
                 //policko je prazdne - hodnoti se frontier disky
@@ -138,14 +184,18 @@ public class ArtificialIntelligence {
         //dava hodnoty 0 - [-]100
         if (countOfMyDisks > countOfOppenentsDisks) 
             countOfDiskRes = 100 * countOfMyDisks / (countOfMyDisks + countOfOppenentsDisks);
-        else
+        else if (countOfOppenentsDisks > countOfMyDisks)
             countOfDiskRes = -(100 * countOfOppenentsDisks / (countOfMyDisks + countOfOppenentsDisks));
+        else
+            countOfDiskRes = 0;
         
         //dava hodnoty 0 - [-]100
         if (myFrontiers > oppFrontiers)
             frontiersRes = -(100 * myFrontiers / (myFrontiers + oppFrontiers));
-        else
+        else if (myFrontiers < oppFrontiers)
             frontiersRes = 100 * myFrontiers / (myFrontiers + oppFrontiers);
+        else
+            frontiersRes = 0;
         
         //umisteni v rohu
         if (!board.getField(1, 1).isEmpty() && board.getField(1, 1).getDisk().isWhite() == color)
@@ -185,9 +235,12 @@ public class ArtificialIntelligence {
             mobilityRes = 100 * myMobility / (myMobility + oppMobility);
         else if (myMobility < oppMobility)
             mobilityRes = -(100 * oppMobility / (myMobility + oppMobility));
+        else
+            mobilityRes = 0;
         
         //prirazeni vysledne vahy
-        return  countOfDiskRes + posValue + 7 * frontiersRes + 80 * disksInCornerRes + 8 * mobilityRes;
+        result = countOfDiskRes + posValue + 7 * frontiersRes + 80 * disksInCornerRes + 8 * mobilityRes;
+        return result;
     }
     
     public static int getHeuristicValue(Board board, boolean color) {
@@ -265,4 +318,18 @@ public class ArtificialIntelligence {
         return result_desk;
     }
     
+    
+    public static boolean putDiskAi(Board board, Field field, Player player) {
+        int row, col;
+        row = field.getRow();
+        col = field.getColumn();
+        System.out.println("******Pred vlozenim*******");
+        board.toString();
+        System.out.println("**************************");
+        Field fieldInDesk = board.getField(row, col);
+        if (player.canPutDisk(fieldInDesk))
+            if (player.putDisk(fieldInDesk))
+                return true;
+        return false;
+    }
 }

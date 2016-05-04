@@ -20,18 +20,23 @@ public class AiPlayer extends Player implements Serializable{
 
     
     @Override
-    public boolean putDisk(Board board){
+    public boolean putDisk(Game game){
         Field tmp;
         switch (aiType){
             case rand:
-                tmp = ArtificialIntelligence.randomAI(board, this);
+                tmp = ArtificialIntelligence.randomAI(game.getBoard(), this);
                 if(tmp != null) 
                     if (canPutDisk(tmp))
-                    return putDisk(tmp);
+                        return putDisk(tmp);
                 else return false;
             case minMax:
-                tmp = ArtificialIntelligence.minMaxAI(board, this);
-                if(tmp != null) return putDisk(tmp);
+                Game gameTmp = new Game(game);
+                tmp = ArtificialIntelligence.minMaxAI(game.getBoard(), this, 0, gameTmp, this.white, true);
+                System.out.println("puvodni deska");
+                game.getBoard().toString();
+                if(tmp != null)
+                    if (canPutDisk(tmp))
+                        return putDisk(tmp);
                 else return false;
             default:
                 return false;
@@ -44,6 +49,6 @@ public class AiPlayer extends Player implements Serializable{
     public Ai getInteligence() {
        return aiType;
     }
-    
+
 
 }

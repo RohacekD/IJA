@@ -72,5 +72,33 @@ public class BorderField implements Field, Serializable {
     public boolean isEmpty() {
         return false;
     }
+    
+    /**
+     * Ohodnoceni hraničního políčka je vždy 0
+     * @return Vrací ohodnocení (0)
+     */
+    @Override
+    public int getRating() {
+        return 0;
+    }
+
+    /**
+     * Nedělá nic - hraninímu políčkuohodnocení nenastavuji
+     * @param value 
+     */
+    @Override
+    public void setRating(int value) {
+        
+    }
+
+    @Override
+    public int getColumn() {
+        return -1;
+    }
+
+    @Override
+    public int getRow() {
+        return -1;
+    }
 
 }

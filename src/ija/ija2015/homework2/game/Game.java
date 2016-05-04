@@ -31,7 +31,18 @@ public class Game implements Serializable{
         this.blackPlayer = null;
         this.currentPlayer = null;
     }
-
+    
+    /**
+     * copy konstruktor
+     * @param game  Hra ke zkopirovani
+     */
+    public Game(Game game) {
+        this.board = game.board;
+        this.whitePlayer = game.whitePlayer;
+        this.blackPlayer = game.blackPlayer;
+        this.currentPlayer = game.currentPlayer;
+    }
+    
     /**
      * Přidá hráče a současně vyvolá jeho inicializaci. Pokud hráč dané barvy
      * již existuje, nedělá nic a vrací false.
@@ -65,6 +76,14 @@ public class Game implements Serializable{
         return this.currentPlayer;
     }
 
+    public Player getWhitePlayer() {
+        return whitePlayer;
+    }
+
+    public Player getBlackPlayer() {
+        return blackPlayer;
+    }
+    
     /**
      * Změní aktuálního hráče.
      *
@@ -157,7 +176,7 @@ public class Game implements Serializable{
                     }
                     otherCantPlay = true;
                 } else {
-                    this.currentPlayer().putDisk(this.getBoard());
+                    this.currentPlayer().putDisk(this);
                     this.nextPlayer();
                     otherCantPlay = false;
                 }

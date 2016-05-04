@@ -23,6 +23,10 @@ public class Disk implements Serializable{
         this.isWhite = white;
     }
 
+    public Disk(Disk disk) {
+        this.isWhite = disk.isWhite;
+    }
+    
     /**
      * Otočení (změna barvy) kamene.
      */

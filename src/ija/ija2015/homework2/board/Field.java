@@ -50,10 +50,34 @@ public interface Field {
     /**
      * Vrací informaci o tom, zda je pole prázdné.
      *
-     * @return
+     * @return Vrací TRUE, jestliže je políčko prázdné
      */
     boolean isEmpty();
-
+    
+    /**
+     * Vrací ohodnocení políčka pro minimax
+     * @return Ohodnocení políčka
+     */
+    int getRating();
+    
+    /**
+     * Nastaví hodnocení políčka pro minimax
+     * @param value 
+     */
+    void setRating(int value);
+    
+    /**
+     * vrati cislo sloupce
+     * @return cislo sloupce
+     */
+    int getColumn();
+    
+    /**
+     * vrati cislo radku
+     * @return cislo radku
+     */
+    int getRow();
+    
     /**
      * Výčtový typ reprezentující okolí (směry) jednotlivých polí.
      */
