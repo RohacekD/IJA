@@ -12,8 +12,12 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 
 /**
@@ -25,24 +29,29 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
     private ImageIcon imageBigWhite;
     private ImageIcon imageBigBlack;
     private Game guiGame;
-    
+    private boolean ended;
+    private boolean otherCantPlay;
     
     private ImageIcon usingBlack;
     private ImageIcon usingWhite;
+    private ImageIcon imageMenuBlack;
+    private ImageIcon imageMenuWhite;
     
-    
+   
     
 
     /**
      * Creates new form GameFrame
      * @param size
      */
-    public GameFrame(int size, Ai whiteAi, Ai blackAi) {
+    public GameFrame(int size, Game game) {
         super();
         initComponents();
-        guiGame = Reversi.createNewGame(size,whiteAi,blackAi);
+        guiGame = game;
         imageBigBlack = new ImageIcon(getClass().getResource("/img/BigBlack.png"));
         imageBigWhite = new ImageIcon(getClass().getResource("/img/BigWhite.png"));
+        imageMenuBlack = new ImageIcon(getClass().getResource("/img/black.png"));
+        imageMenuWhite = new ImageIcon(getClass().getResource("/img/white.png"));
         
         switch(size){
             case 6:  usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
@@ -75,19 +84,100 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                 guiBoard[i][j] = tmp;
 
 
-           
             }
         }
-        
-        
+
         jPanel2.setBackground(Color.DARK_GRAY);
         getContentPane().setBackground(Color.DARK_GRAY);
         updateGui(guiGame);
-                
 
-
+        SwingWorker myWorker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws Exception {
+                try {
+                    makeMove();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return null;
+            }
+        };
+        myWorker.execute();
 
     }
+
+    public void makeMove() throws InterruptedException{
+        while(guiGame.currentPlayer().getInteligence()!=Ai.human &&!ended){
+            Thread.sleep(2000);
+           if(!guiGame.currentPlayer().putDisk(guiGame)){
+               if(otherCantPlay) ended = true;
+               otherCantPlay = true;
+               
+           }
+           otherCantPlay = false;
+           guiGame.nextPlayer();
+           updateGui(guiGame);
+           
+            
+        }
+        if(ended) updateGui(guiGame);
+    }
+    
+    public void makeUserMove(int x, int y) {
+        if (guiGame.currentPlayer().getInteligence() == Ai.human && !ended) {
+            if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()) {
+                System.out.println("Neni kam hrat");
+                if (otherCantPlay) {
+                    ended = true;
+                } else {
+                    guiGame.nextPlayer();
+                    otherCantPlay = true;
+                }
+                updateGui(guiGame);
+
+            } else if ((guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks())) {
+                System.out.println("Dosly disky!");
+                guiGame.nextPlayer();
+                if (otherCantPlay) {
+                    ended = true;
+
+                }
+                otherCantPlay = true;
+                updateGui(guiGame);
+            } else {
+                otherCantPlay = false;
+                if (guiGame.currentPlayer().canPutDisk(guiGame.getBoard().getField(x, y))) {
+                    guiGame.currentPlayer().putDisk(guiGame.getBoard().getField(x, y));
+                    guiGame.nextPlayer();
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateGui(guiGame);
+                        }
+                    });
+
+                    SwingWorker myWorker = new SwingWorker<String, Void>() {
+                        @Override
+                        protected String doInBackground() throws Exception {
+                            try {
+                                makeMove();
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            return null;
+                        }
+                    };
+                    myWorker.execute();
+
+                }
+                
+
+            }
+
+        }
+    }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -238,11 +328,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                         .addGap(42, 42, 42))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(15, 15, 15)
-                                    .addComponent(jLabelBlackOnBoard))
-                                .addComponent(jLabel9))
+                            .addComponent(jLabel9)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addGap(12, 12, 12)
@@ -265,7 +351,8 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButtonSave, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonUndo, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelBlackOnBoard))
                         .addGap(62, 62, 62))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -350,8 +437,24 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                 
             }
         }
-       // jLabelBlackLeft.setText(game.getBlackPlayer().);
+        int count = game.getBoard().getRules().numberDisks();
+        jLabelBlackLeft.setText(count-game.getBlackPlayer().getTakenFromPool()+"");
+        jLabelWhiteLeft.setText(count-game.getWhitePlayer().getTakenFromPool()+"");
+        jLabelWhiteOnBoard.setText(game.getBoard().score()[0]+"");
+        jLabelBlackOnBoard.setText(game.getBoard().score()[1]+"");
+        if(game.currentPlayer().isWhite()){
+            jLabelNextMove.setIcon(imageMenuWhite);
+        }
+        else jLabelNextMove.setIcon(imageMenuBlack);
+        if(ended){
+            jLabelWinner.setText("WINNER!!!");
+            if(game.getBoard().score()[0]>game.getBoard().score()[1]) jLabelNextMove.setIcon(imageMenuWhite);
+            else jLabelNextMove.setIcon(imageMenuWhite);
+        }
     }
+    
+
+    
     private void jButtonUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUndoActionPerformed
 
       
@@ -362,7 +465,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
     }//GEN-LAST:event_jButtonResetActionPerformed
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
     /**
@@ -421,11 +524,9 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 
-    @Override
     public void actionPerformed(ActionEvent e) {
         SituatedButton tmp = (SituatedButton)e.getSource();
-        tmp.getXpos();
-        tmp.getYpos();
-        System.out.println(tmp.getXpos()+", "+tmp.getYpos());
+        makeUserMove(tmp.getXpos()+1, tmp.getYpos()+1);
+        System.out.println(tmp.getXpos()+1+", "+1+tmp.getYpos());
     }
 }

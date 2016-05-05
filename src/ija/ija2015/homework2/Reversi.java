@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 import javax.swing.JFrame;
 
 /**
@@ -42,7 +41,7 @@ public class Reversi {
         if (p2Ai == Ai.human) {
             p2 = new HumanPlayer(false);
         } else {
-            p2 = new AiPlayer(false, p1Ai);
+            p2 = new AiPlayer(false, p2Ai);
         }
 
         game.addPlayer(p1);
@@ -117,7 +116,7 @@ public class Reversi {
     public static void main(String[] args) {
 
         runMenu();
-        //Game game = createNewGame(3, Ai.human, Ai.rand);
+        //Game game = createNewGame(6, Ai.human, Ai.rand);
         
         //Game game = loadFromFile("save.sv");
 

@@ -102,7 +102,7 @@ public class Game implements Serializable{
         try {
             File dir = new File("saves");
             dir.mkdir();
-
+            
             FileOutputStream fout = new FileOutputStream("./saves/" + name);
             ObjectOutputStream oos = new ObjectOutputStream(fout);
             oos.writeObject(this);

@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
  * @author Dalibor Jelinek
  */
 public class StartFrame extends javax.swing.JFrame {
-
+    DefaultListModel<String> model;
     
 
     /**
@@ -34,6 +34,7 @@ public class StartFrame extends javax.swing.JFrame {
         DefaultListCellRenderer renderer = (DefaultListCellRenderer) jListLoad.getCellRenderer();
         renderer.setHorizontalAlignment(SwingConstants.CENTER);
         jListLoad.setFixedCellHeight(50);
+        model = new DefaultListModel<>();
         
         
     }
@@ -290,7 +291,7 @@ public class StartFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButNewGameActionPerformed
 
     private void jButtonLoadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoadGameActionPerformed
-        DefaultListModel<String> model = new DefaultListModel<>();
+        
         ArrayList<String> names = Reversi.getSavedGames();
         for (String s : names) {
             model.addElement(s);
@@ -310,18 +311,24 @@ public class StartFrame extends javax.swing.JFrame {
         String toLoad = (String)list.getModel().getElementAt(index);
         System.out.println(toLoad);
         Game game = Reversi.loadFromFile(toLoad);
-             game.play();
+                     java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new GameFrame(jSliderSize.getValue(),game).setVisible(true);
+            }
+        });
     }
     }//GEN-LAST:event_jListLoadMouseClicked
 
     private void jButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlayActionPerformed
+        Game game = Reversi.createNewGame(jSliderSize.getValue(), (Ai) jComboBoxWhite.getSelectedItem(), (Ai) jComboBoxBlack.getSelectedItem());
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new GameFrame(jSliderSize.getValue(),(Ai)jComboBoxWhite.getSelectedItem(),(Ai)jComboBoxWhite.getSelectedItem()).setVisible(true);
+                new GameFrame(jSliderSize.getValue(),game).setVisible(true);
             }
         });
-       
+        
     }//GEN-LAST:event_jButtonPlayActionPerformed
 
     private void jSliderSizeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderSizeStateChanged
