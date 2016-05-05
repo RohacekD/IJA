@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 /**
  * Reprezentuje hru. Při inicializaci se vždy přiřadí hrací deska.
@@ -108,7 +109,12 @@ public class Game implements Serializable{
         try {
             File dir = new File("saves");
             dir.mkdir();
-            
+            if (new File("./saves/" + name).isFile()) {
+                int dialogResult = JOptionPane.showConfirmDialog(null, "Would You Like rewrite exist game?", "Warning", JOptionPane.YES_NO_OPTION);
+                if (dialogResult == JOptionPane.NO_OPTION) {
+                    return false;
+                }
+            }
             FileOutputStream fout = new FileOutputStream("./saves/" + name);
             ObjectOutputStream oos = new ObjectOutputStream(fout);
             oos.writeObject(this);
