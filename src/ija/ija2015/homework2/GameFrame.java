@@ -492,7 +492,8 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
 
     
     private void jButtonUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUndoActionPerformed
-
+        guiGame.currentPlayer().undo();
+        updateGui(guiGame);
       
     }//GEN-LAST:event_jButtonUndoActionPerformed
 

@@ -237,11 +237,9 @@ public abstract class Player implements Serializable{
         }
     }
     
-    boolean undo() {
+    public boolean undo() {
         this.takenFromPool--;
-        if (this.undo.undo(takenFromPool, this.white, this.pool)) 
-            return true;
-        else return false;
+        return this.undo.undo(takenFromPool, this.white, this.pool);
     }
     
     public static enum Ai {
