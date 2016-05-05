@@ -293,6 +293,7 @@ public class StartFrame extends javax.swing.JFrame {
     private void jButtonLoadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoadGameActionPerformed
         
         ArrayList<String> names = Reversi.getSavedGames();
+        model.clear();
         for (String s : names) {
             model.addElement(s);
         }
@@ -314,7 +315,7 @@ public class StartFrame extends javax.swing.JFrame {
                      java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new GameFrame(jSliderSize.getValue(),game).setVisible(true);
+                new GameFrame(game).setVisible(true);
             }
         });
     }
@@ -325,7 +326,7 @@ public class StartFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new GameFrame(jSliderSize.getValue(),game).setVisible(true);
+                new GameFrame(game).setVisible(true);
             }
         });
         

@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.border.Border;
@@ -36,22 +37,34 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
     private ImageIcon usingWhite;
     private ImageIcon imageMenuBlack;
     private ImageIcon imageMenuWhite;
+    private SwingWorker aiWorker;
     
    
     
 
     /**
      * Creates new form GameFrame
-     * @param size
      */
-    public GameFrame(int size, Game game) {
+    public GameFrame(Game game) {
         super();
         initComponents();
         guiGame = game;
+        int size = game.getBoard().getSize();
         imageBigBlack = new ImageIcon(getClass().getResource("/img/BigBlack.png"));
         imageBigWhite = new ImageIcon(getClass().getResource("/img/BigWhite.png"));
         imageMenuBlack = new ImageIcon(getClass().getResource("/img/black.png"));
         imageMenuWhite = new ImageIcon(getClass().getResource("/img/white.png"));
+        aiWorker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws Exception {
+                try {
+                    makeMove();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return null;
+            }
+        };
         
         switch(size){
             case 6:  usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
@@ -60,8 +73,8 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
             case 8:  usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
                      usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
                      break;
-            case 10: usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(56, 56, java.awt.Image.SCALE_SMOOTH));
-                     usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(56, 66, java.awt.Image.SCALE_SMOOTH));
+            case 10: usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
+                     usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
                      break;
             case 12: usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
                      usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
@@ -90,48 +103,76 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
         jPanel2.setBackground(Color.DARK_GRAY);
         getContentPane().setBackground(Color.DARK_GRAY);
         updateGui(guiGame);
-
-        SwingWorker myWorker = new SwingWorker<String, Void>() {
-            @Override
-            protected String doInBackground() throws Exception {
-                try {
-                    makeMove();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return null;
-            }
-        };
-        myWorker.execute();
+        aiWorker.execute();
 
     }
 
-    public void makeMove() throws InterruptedException{
-        while(guiGame.currentPlayer().getInteligence()!=Ai.human &&!ended){
-            Thread.sleep(2000);
-           if(!guiGame.currentPlayer().putDisk(guiGame)){
-               if(otherCantPlay) ended = true;
-               otherCantPlay = true;
-               
-           }
-           otherCantPlay = false;
-           guiGame.nextPlayer();
-           updateGui(guiGame);
-           
-            
+    public void makeMove() throws InterruptedException {
+        while (guiGame.currentPlayer().getInteligence() != Ai.human && !ended) {
+            updateGui(guiGame);
+            Thread.sleep(1000);
+            if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()) {
+                System.out.println("Neni kam hrat UI move");
+                if (otherCantPlay) {
+                    ended = true;
+                    System.out.println("KONEC - UI move");
+                }
+                guiGame.nextPlayer();
+                                if(guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()||guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()){
+                   guiGame.nextPlayer(); 
+                   otherCantPlay = true;
+                   
+                }
+
+            } else if (guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
+                System.out.println("Dosly disky!");
+                guiGame.nextPlayer();
+                if (otherCantPlay) {
+                    ended = true;
+                    System.out.println("KONEC - UI move");
+                    continue;
+                }
+                otherCantPlay = true;
+            } else {
+                guiGame.currentPlayer().putDisk(guiGame);
+                guiGame.nextPlayer();
+                otherCantPlay = false;
+                if(guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()||guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()){
+                   guiGame.nextPlayer(); 
+                   otherCantPlay = true;
+                   
+                }
+
+            }
+
         }
-        if(ended) updateGui(guiGame);
+        updateGui(guiGame);
+
     }
     
     public void makeUserMove(int x, int y) {
         if (guiGame.currentPlayer().getInteligence() == Ai.human && !ended) {
             if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()) {
-                System.out.println("Neni kam hrat");
+                System.out.println("Neni kam hrat user move");
                 if (otherCantPlay) {
                     ended = true;
+                    System.out.println("KONEC - user move");
                 } else {
                     guiGame.nextPlayer();
                     otherCantPlay = true;
+                    System.out.println("sputil jsem UI");
+                                        SwingWorker myWorker = new SwingWorker<String, Void>() {
+                        @Override
+                        protected String doInBackground() throws Exception {
+                            try {
+                                makeMove();
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            return null;
+                        }
+                    };
+                    myWorker.execute();
                 }
                 updateGui(guiGame);
 
@@ -140,20 +181,20 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                 guiGame.nextPlayer();
                 if (otherCantPlay) {
                     ended = true;
+                    System.out.println("KONEC - user move");
 
                 }
+                guiGame.nextPlayer();
                 otherCantPlay = true;
+                aiWorker.execute();
                 updateGui(guiGame);
             } else {
                 otherCantPlay = false;
                 if (guiGame.currentPlayer().canPutDisk(guiGame.getBoard().getField(x, y))) {
                     guiGame.currentPlayer().putDisk(guiGame.getBoard().getField(x, y));
                     guiGame.nextPlayer();
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateGui(guiGame);
-                        }
+                    SwingUtilities.invokeLater(() -> {
+                        updateGui(guiGame);
                     });
 
                     SwingWorker myWorker = new SwingWorker<String, Void>() {
@@ -175,6 +216,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
             }
 
         }
+        if(ended)updateGui(guiGame);
     }
     
 
@@ -204,9 +246,9 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
         jLabelNextMove = new javax.swing.JLabel();
         jLabelWinner = new javax.swing.JLabel();
         jButtonUndo = new javax.swing.JButton();
-        jButtonReset = new javax.swing.JButton();
         jButtonSave = new javax.swing.JButton();
 
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("Reversi - GAME WINDOW");
         setResizable(false);
 
@@ -237,11 +279,13 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
 
         jLabelWhiteLeft.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabelWhiteLeft.setForeground(new java.awt.Color(204, 204, 204));
+        jLabelWhiteLeft.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelWhiteLeft.setText("60");
         jLabelWhiteLeft.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabelBlackLeft.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabelBlackLeft.setForeground(new java.awt.Color(204, 204, 204));
+        jLabelBlackLeft.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelBlackLeft.setText("60");
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -258,6 +302,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
 
         jLabelWhiteOnBoard.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabelWhiteOnBoard.setForeground(new java.awt.Color(204, 204, 204));
+        jLabelWhiteOnBoard.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelWhiteOnBoard.setText("60");
         jLabelWhiteOnBoard.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
@@ -267,6 +312,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
 
         jLabelBlackOnBoard.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabelBlackOnBoard.setForeground(new java.awt.Color(204, 204, 204));
+        jLabelBlackOnBoard.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelBlackOnBoard.setText("60");
         jLabelBlackOnBoard.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
@@ -282,13 +328,6 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
         jButtonUndo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonUndoActionPerformed(evt);
-            }
-        });
-
-        jButtonReset.setText("Reset");
-        jButtonReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonResetActionPerformed(evt);
             }
         });
 
@@ -310,17 +349,15 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jLabelWhiteLeft))))
+                                .addGap(12, 12, 12)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabelWhiteLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(51, 51, 51)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(15, 15, 15)
-                                    .addComponent(jLabelWhiteOnBoard))
-                                .addComponent(jLabel7))
-                            .addComponent(jLabel5))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabelWhiteOnBoard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -328,12 +365,11 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                         .addGap(42, 42, 42))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel9)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(12, 12, 12)
-                                    .addComponent(jLabelBlackLeft))
-                                .addComponent(jLabel6)))
+                            .addComponent(jLabelBlackOnBoard, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel9)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabelBlackLeft, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(52, 52, 52))))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(105, 105, 105)
@@ -342,7 +378,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                 .addComponent(jLabelNextMove, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(77, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabelWinner)
@@ -350,9 +386,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButtonSave, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonUndo, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelBlackOnBoard))
+                            .addComponent(jButtonUndo, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(62, 62, 62))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -362,40 +396,41 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel6))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelWhiteLeft)
                     .addComponent(jLabelBlackLeft))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelWhiteOnBoard))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelBlackOnBoard)))
-                .addGap(24, 24, 24)
-                .addComponent(jLabelWinner)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabelBlackOnBoard)
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabelWinner)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel11))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(jLabelNextMove, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel11))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabelNextMove, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelWhiteOnBoard)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jButtonUndo)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonSave)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonReset)
-                .addGap(53, 53, 53))
+                .addGap(96, 96, 96))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -448,8 +483,9 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
         else jLabelNextMove.setIcon(imageMenuBlack);
         if(ended){
             jLabelWinner.setText("WINNER!!!");
-            if(game.getBoard().score()[0]>game.getBoard().score()[1]) jLabelNextMove.setIcon(imageMenuWhite);
-            else jLabelNextMove.setIcon(imageMenuWhite);
+            if(game.getBoard().score()[0]>game.getBoard().score()[1])
+                jLabelNextMove.setIcon(imageMenuWhite);
+            else jLabelNextMove.setIcon(imageMenuBlack);
         }
     }
     
@@ -460,12 +496,10 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
       
     }//GEN-LAST:event_jButtonUndoActionPerformed
 
-    private void jButtonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonResetActionPerformed
-
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-       
+         String name = JOptionPane.showInputDialog(null,"Insert name of game","Save game",JOptionPane.OK_CANCEL_OPTION);
+         
+        guiGame.writeToFile(name);
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
     /**
@@ -504,7 +538,6 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonReset;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JButton jButtonUndo;
     private javax.swing.JLabel jLabel1;
