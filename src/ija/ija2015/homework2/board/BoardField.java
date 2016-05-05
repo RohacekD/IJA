@@ -171,5 +171,10 @@ public class BoardField implements Field, Serializable {
     public int getRow() {
         return this.row;
     }
+
+    @Override
+    public void setDiskToNull() {
+        this.disk = null;
+    }
     
 }

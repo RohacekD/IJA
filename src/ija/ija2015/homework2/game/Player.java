@@ -23,6 +23,7 @@ public abstract class Player implements Serializable{
     protected boolean initialized;
     protected final ArrayList<Disk> toTurnOver;
     protected boolean alreadyChecked;
+    protected Undo undo;
 
     /**
      * Inicializuje hráče.
@@ -38,6 +39,7 @@ public abstract class Player implements Serializable{
         initialized = false;
         alreadyChecked = false;
         legals = new ArrayList<>();
+        undo = new Undo();
     }
 
     /**
@@ -148,6 +150,7 @@ public abstract class Player implements Serializable{
                 for (Disk tmp : toTurnOver) {
                     tmp.turn();
                 }
+                initUndo(field, toTurnOver);
                 toTurnOver.clear();
             }
             return true;
@@ -225,6 +228,21 @@ public abstract class Player implements Serializable{
         return toTurnOver;
     }
     
+    void initUndo(Field field, ArrayList<Disk> toTurn) {
+        if (this.getInteligence() != Ai.human) {
+            this.undo.addToUndoLists(field, false, toTurn);
+        }
+        else {
+            this.undo.addToUndoLists(field, true, toTurn);
+        }
+    }
+    
+    boolean undo() {
+        this.takenFromPool--;
+        if (this.undo.undo(takenFromPool, this.white, this.pool)) 
+            return true;
+        else return false;
+    }
     
     public static enum Ai {
 

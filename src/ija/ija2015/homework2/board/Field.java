@@ -79,6 +79,11 @@ public interface Field {
     int getRow();
     
     /**
+     * nastavuje disk na NULL - pro ucely UNDO 
+     */ 
+    void setDiskToNull();
+    
+    /**
      * Výčtový typ reprezentující okolí (směry) jednotlivých polí.
      */
     public static enum Direction {

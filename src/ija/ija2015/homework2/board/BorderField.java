@@ -101,4 +101,8 @@ public class BorderField implements Field, Serializable {
         return -1;
     }
 
+    @Override
+    public void setDiskToNull() {
+    }
+
 }
