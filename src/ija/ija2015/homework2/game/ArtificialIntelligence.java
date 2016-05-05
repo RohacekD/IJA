@@ -1,6 +1,7 @@
 package ija.ija2015.homework2.game;
 
 import ija.ija2015.homework2.board.Board;
+import ija.ija2015.homework2.board.Disk;
 import ija.ija2015.homework2.board.Field;
 import java.util.ArrayList;
 import java.util.Random;
@@ -45,6 +46,10 @@ public class ArtificialIntelligence {
         
         //ziskani policek, kam lze vlozit disk
         ArrayList<Field> moves = plr.getLegals(board);
+        /*if (moves.size() == 0) {
+            board.toString();
+            System.out.println("NENI KAM VLOZIT DISK");
+        }*/
         
         //prochazim pres vsechny mozne pozice
         for (Field currField : moves) {
@@ -55,16 +60,13 @@ public class ArtificialIntelligence {
             if (! putDiskAi(boardTmp, currField, plr))
                 System.out.println("VLOZENI DISKU SE NEZDARILO");;
             
-            System.out.println("-----------DEBUGGING-----------");
+           /* System.out.println("-----------DEBUGGING-----------");
             boardTmp.toString();
-            System.out.println("-------------------------------");
+            System.out.println("-------------------------------");*/
     
-            //zmena hrace
-            if (depth < 4)
-                plr = game.nextPlayer();
-            
+            game.setCurrentPlayer(plr);
             //minmax pro druheho hrace
-            Field nextMove = minMaxAI(boardTmp, plr, depth + 1, game, color, false);
+            Field nextMove = minMaxAI(boardTmp, game.nextPlayer(), depth + 1, game, color, false);
             
             //jsem v maximalni hloubce, nebo korenovem listu
             if (nextMove == null) {
@@ -72,7 +74,6 @@ public class ArtificialIntelligence {
             }
             //nejsem v korenovem listu - prepisuji hodnotu z potomka
             else {
-                plr = game.nextPlayer();
                 currField.setRating(nextMove.getRating());
             }
             
@@ -150,8 +151,8 @@ public class ArtificialIntelligence {
         int result = 0;
         
         
-        System.out.println("Board pro vyhodnoceni");
-        board.toString();
+        //System.out.println("Board pro vyhodnoceni");
+        //board.toString();
         for (int i = 1; i < board.getSize() + 1; i++) {
             for (int j = 1; j < board.getSize() + 1; j++) {
                 //policko je prazdne - hodnoti se frontier disky
@@ -323,13 +324,19 @@ public class ArtificialIntelligence {
         int row, col;
         row = field.getRow();
         col = field.getColumn();
-        System.out.println("******Pred vlozenim*******");
+       /* System.out.println("******Pred vlozenim*******");
         board.toString();
-        System.out.println("**************************");
+        System.out.println("**************************");*/
         Field fieldInDesk = board.getField(row, col);
-        if (player.canPutDisk(fieldInDesk))
-            if (player.putDisk(fieldInDesk))
-                return true;
+        if (player.canPutDisk(fieldInDesk)) {
+            ArrayList<Disk> turning = player.getToTurnOver();
+            Disk disk = new Disk(player.white);
+            fieldInDesk.putDisk(disk);
+            for (Disk tmp : turning) {
+                tmp.turn();
+            }
+            return true;
+        }
         return false;
     }
 }

@@ -83,6 +83,12 @@ public class Game implements Serializable{
     public Player getBlackPlayer() {
         return blackPlayer;
     }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+    
+    
     
     /**
      * Změní aktuálního hráče.
@@ -133,6 +139,7 @@ public class Game implements Serializable{
                         } else {
                             this.nextPlayer();
                             otherCantPlay = true;
+                            break;
                         }
                     } else if ((this.currentPlayer.takenFromPool == this.getBoard().getRules().numberDisks())) {
                         System.out.println("Dosly disky!");
@@ -163,10 +170,11 @@ public class Game implements Serializable{
 
                 if (this.currentPlayer().getLegals(this.getBoard()).isEmpty()) {
                     System.out.println("Neni kam hrat");
-                    this.nextPlayer();
                     if (otherCantPlay) {
                         ended = true;
+                        break;
                     }
+                    this.nextPlayer();
                     otherCantPlay = true;
                 } else if (this.currentPlayer.takenFromPool == this.getBoard().getRules().numberDisks()) {
                     System.out.println("Dosly disky!");
@@ -194,7 +202,11 @@ public class Game implements Serializable{
         }
     }
 
-    
+    public void setPlayerWithColor(boolean color) {
+        if (this.currentPlayer.white != color) {
+            this.nextPlayer();
+        }
+    }
     
     /**
      * Vrátí hrací desku.
