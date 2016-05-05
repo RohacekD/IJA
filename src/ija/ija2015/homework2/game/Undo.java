@@ -7,13 +7,14 @@ package ija.ija2015.homework2.game;
 
 import ija.ija2015.homework2.board.Disk;
 import ija.ija2015.homework2.board.Field;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author Honza
  */
-public class Undo {
+public class Undo implements Serializable{
     
     ArrayList<Field>[] fields;
     ArrayList<Disk>[] turnedDisks;
