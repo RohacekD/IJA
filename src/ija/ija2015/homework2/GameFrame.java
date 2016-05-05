@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ija.ija2015.homework2;
 
 import ija.ija2015.homework2.board.Field;
@@ -22,28 +17,31 @@ import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 
 /**
+ * Třída grafického rozhraní samotné hry.
  *
- * @author Dalibor Jelinek
+ * @author xjelin42, xpavlu08
  */
-public class GameFrame extends javax.swing.JFrame implements ActionListener{
+public class GameFrame extends javax.swing.JFrame implements ActionListener {
+
     private final SituatedButton[][] guiBoard;
     private ImageIcon imageBigWhite;
     private ImageIcon imageBigBlack;
     private Game guiGame;
     private boolean ended;
     private boolean otherCantPlay;
-    
     private ImageIcon usingBlack;
     private ImageIcon usingWhite;
     private ImageIcon imageMenuBlack;
     private ImageIcon imageMenuWhite;
     private SwingWorker aiWorker;
-    
-   
-    
 
     /**
-     * Creates new form GameFrame
+     * Konstruktor okna převezme instanci třídy Game a nastavi všechny grafické
+     * náležitosti. Na základe velikosti hrací plochy zvolí vhodnou velikost
+     * ikon, naplní jPanel tlačítky a vykleslí je na základě stavu (logické)
+     * desky.
+     *
+     * @param game instance hry.
      */
     public GameFrame(Game game) {
         super();
@@ -65,38 +63,38 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                 return null;
             }
         };
-        
-        switch(size){
-            case 6:  usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
-                     usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
-                     break;
-            case 8:  usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
-                     usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
-                     break;
-            case 10: usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
-                     usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
-                     break;
-            case 12: usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
-                     usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
-                     break;
-                    
+
+        switch (size) {
+            case 6:
+                usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
+                usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
+                break;
+            case 8:
+                usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
+                usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
+                break;
+            case 10:
+                usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
+                usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
+                break;
+            case 12:
+                usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
+                usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
+                break;
+
         }
-        Border emptyBorder = BorderFactory.createEmptyBorder();        
-        GridLayout deskGrid = new GridLayout(size,size);
+        Border emptyBorder = BorderFactory.createEmptyBorder();
+        GridLayout deskGrid = new GridLayout(size, size);
         jPanel1.setLayout(deskGrid);
         guiBoard = new SituatedButton[size][size];
-        
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                SituatedButton tmp = new SituatedButton(i,j);
+                SituatedButton tmp = new SituatedButton(i, j);
                 jPanel1.add(tmp);
                 tmp.setBorder(emptyBorder);
                 tmp.addActionListener(this);
-                //tmp.setIcon(usingBlack);
-
                 guiBoard[i][j] = tmp;
-
-
             }
         }
 
@@ -107,6 +105,13 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
 
     }
 
+    /**
+     * Tah umělé inteligence. Pro přirozenější působení aplikace nejprve 1000ms
+     * "přemýšlí", poté učiní tah a přepne aktivního hráče. Toto dělá, dokud
+     * není na tahu hráč typu human.
+     *
+     * @throws InterruptedException
+     */
     public void makeMove() throws InterruptedException {
         while (guiGame.currentPlayer().getInteligence() != Ai.human && !ended) {
             updateGui(guiGame);
@@ -118,10 +123,10 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                     System.out.println("KONEC - UI move");
                 }
                 guiGame.nextPlayer();
-                                if(guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()||guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()){
-                   guiGame.nextPlayer(); 
-                   otherCantPlay = true;
-                   
+                if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty() || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
+                    guiGame.nextPlayer();
+                    otherCantPlay = true;
+
                 }
 
             } else if (guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
@@ -137,10 +142,10 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                 guiGame.currentPlayer().putDisk(guiGame);
                 guiGame.nextPlayer();
                 otherCantPlay = false;
-                if(guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()||guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()){
-                   guiGame.nextPlayer(); 
-                   otherCantPlay = true;
-                   
+                if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty() || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
+                    guiGame.nextPlayer();
+                    otherCantPlay = true;
+
                 }
 
             }
@@ -149,8 +154,8 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
         updateGui(guiGame);
 
     }
-    
-    public void makeUserMove(int x, int y) {
+
+        public void makeUserMoves(int x, int y) {
         if (guiGame.currentPlayer().getInteligence() == Ai.human && !ended) {
             if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()) {
                 System.out.println("Neni kam hrat user move");
@@ -160,8 +165,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                 } else {
                     guiGame.nextPlayer();
                     otherCantPlay = true;
-                    System.out.println("sputil jsem UI");
-                                        SwingWorker myWorker = new SwingWorker<String, Void>() {
+                    SwingWorker myWorker = new SwingWorker<String, Void>() {
                         @Override
                         protected String doInBackground() throws Exception {
                             try {
@@ -211,15 +215,63 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
                     myWorker.execute();
 
                 }
-                
 
             }
 
         }
-        if(ended)updateGui(guiGame);
+        if (ended) {
+            updateGui(guiGame);
+        }
     }
-    
+    /**
+     * Tah uživatele. Metoda převezme souřadnice a pokusí se na ně umísit kámen
+     * Pokud aktuální hráč nemá kam táhnout nebo mu došly disky, předá tah
+     * následijícímu hráč a pokusí se spustit modul umělé inteigence. Ten se ale
+     * spustí jen za předpokladu, že následujícím hráčem je skutečně počítač.
+     *
+     * @param x X souřadnice tahu.
+     * @param y Y souřadnice tahu.
+     */
+    public void makeUserMove(int x, int y) {
+        if (guiGame.currentPlayer().getInteligence() == Ai.human && !ended) {
+            if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()
+                    || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
+                
+                otherCantPlay = false;
+                guiGame.nextPlayer();
+                if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()
+                        || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
+                    ended = true;
+                    updateGui(guiGame);
+                    return;
+                }
+            }
+            else {
+                otherCantPlay = false;
+                if (guiGame.currentPlayer().canPutDisk(guiGame.getBoard().getField(x, y))) {
+                    guiGame.currentPlayer().putDisk(guiGame.getBoard().getField(x, y));
+                    guiGame.nextPlayer();
+                    SwingUtilities.invokeLater(() -> {
+                        updateGui(guiGame);
+                    });
 
+                    SwingWorker myWorker = new SwingWorker<String, Void>() {
+                        @Override
+                        protected String doInBackground() throws Exception {
+                            try {
+                                makeMove();
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            return null;
+                        }
+                    };
+                    myWorker.execute();
+
+                }
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -498,45 +550,11 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
     }//GEN-LAST:event_jButtonUndoActionPerformed
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-         String name = JOptionPane.showInputDialog(null,"Insert name of game","Save game",JOptionPane.OK_CANCEL_OPTION);
-         
-        guiGame.writeToFile(name);
+        String name = JOptionPane.showInputDialog(null, "Insert name of game", "Save game", JOptionPane.OK_CANCEL_OPTION);
+        if(!"".equals(name)) guiGame.writeToFile(name);
+        else JOptionPane.showMessageDialog(null, "Name requiered", "Error", JOptionPane.ERROR_MESSAGE);
+       
     }//GEN-LAST:event_jButtonSaveActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GameFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GameFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GameFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GameFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-              //  new GameFrame(6).setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonSave;
@@ -558,9 +576,10 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener{
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        SituatedButton tmp = (SituatedButton)e.getSource();
-        makeUserMove(tmp.getXpos()+1, tmp.getYpos()+1);
-        System.out.println(tmp.getXpos()+1+", "+1+tmp.getYpos());
+        SituatedButton tmp = (SituatedButton) e.getSource();
+        makeUserMove(tmp.getXpos() + 1, tmp.getYpos() + 1);
+        System.out.println(tmp.getXpos() + 1 + ", " + 1 + tmp.getYpos());
     }
 }

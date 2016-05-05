@@ -10,11 +10,10 @@ import java.io.Serializable;
  *
  * @author xpavlu08, xjelin42
  */
-public class Board implements Serializable{
+public class Board implements Serializable {
 
     private final Field[][] desk;
     private final Rules rules;
-
 
     /**
      * Inicializuje desku.
@@ -49,21 +48,21 @@ public class Board implements Serializable{
             }
         }
     }
-    
+
     public Board(Board board) {
         this.desk = new Field[board.getSize() + 2][board.getSize() + 2];
         this.rules = board.rules;
-        
+
         for (int i = 0; i < board.getSize() + 2; i++) {
             for (int j = 0; j < board.getSize() + 2; j++) {
                 if (i == 0 || j == 0 || i == board.getSize() + 1 || j == board.getSize() + 1) {
                     this.desk[i][j] = new BorderField();
                 } else {
-                    this.desk[i][j] = new BoardField((BoardField)board.getField(i, j));
+                    this.desk[i][j] = new BoardField((BoardField) board.getField(i, j));
                 }
             }
         }
-        
+
         for (int i = 1; i < board.getSize() + 1; i++) {
             for (int j = 1; j < board.getSize() + 1; j++) {
                 this.desk[i][j].addNextField(Field.Direction.D, desk[i + 1][j]);
@@ -138,19 +137,29 @@ public class Board implements Serializable{
         System.out.println(result);
         return result;
     }
-    
-    public int[] score(){
+
+    /**
+     * Počet kamenů obou hráčů.
+     *
+     * @return Vrátí počet bílých a čených kamenů v dvouprvkovém poli ve tvaru
+     * {}
+     */
+    public int[] score() {
         int w, b;
         w = b = 0;
-        for (int i = 1; i < this.getSize()+1; i++) {
-            for (int j = 1; j < this.getSize()+1; j++) {
-                if(!this.desk[i][j].isEmpty())
-                    if(this.desk[i][j].getDisk().isWhite()) w++;
-                    else b++;
+        for (int i = 1; i < this.getSize() + 1; i++) {
+            for (int j = 1; j < this.getSize() + 1; j++) {
+                if (!this.desk[i][j].isEmpty()) {
+                    if (this.desk[i][j].getDisk().isWhite()) {
+                        w++;
+                    } else {
+                        b++;
+                    }
+                }
             }
-            
+
         }
-        int tmp[] = {w,b};
+        int tmp[] = {w, b};
         return tmp;
     }
 

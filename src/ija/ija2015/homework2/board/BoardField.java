@@ -32,7 +32,7 @@ public class BoardField implements Field, Serializable {
             this.surrounding[i] = null;
         }
     }
-    
+
     public BoardField(BoardField field) {
         this.row = field.row;
         this.cols = field.cols;
@@ -176,5 +176,5 @@ public class BoardField implements Field, Serializable {
     public void setDiskToNull() {
         this.disk = null;
     }
-    
+
 }
