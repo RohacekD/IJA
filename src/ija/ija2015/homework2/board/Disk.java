@@ -13,6 +13,7 @@ public class Disk implements Serializable{
     //promenna nabyva hodnot true, pokud jde o bilou barvu
     //false znaci cernou barvu
     private boolean isWhite;
+    private boolean isFreeze;
 
     /**
      * Inicializace kamene.
@@ -60,4 +61,21 @@ public class Disk implements Serializable{
         return hash;
     }
 
+    public boolean isIsWhite() {
+        return isWhite;
+    }
+
+    public void setIsWhite(boolean isWhite) {
+        this.isWhite = isWhite;
+    }
+
+    public boolean isFreeze() {
+        return isFreeze;
+    }
+
+    public void setFreeze(boolean isFreeze) {
+        this.isFreeze = isFreeze;
+    }
+    
+    
 }

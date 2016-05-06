@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 /**
@@ -17,6 +19,7 @@ import javax.swing.SwingConstants;
 public class StartFrame extends javax.swing.JFrame {
 
     DefaultListModel<String> model;
+    private boolean freez;
 
     /**
      * Konstruktor inicializuje vzhled okna.
@@ -34,7 +37,7 @@ public class StartFrame extends javax.swing.JFrame {
         model = new DefaultListModel<>();
 
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,6 +62,12 @@ public class StartFrame extends javax.swing.JFrame {
         jButtonPlay = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jSpinnerI = new javax.swing.JSpinner(new SpinnerNumberModel(0, 0, 1000, 1));
+        jSpinnerB = new javax.swing.JSpinner(new SpinnerNumberModel(0, 0, 1000, 1));
+        jSpinnerC = new javax.swing.JSpinner(new SpinnerNumberModel(0, 0, 1000, 1));
+        jLabelI = new javax.swing.JLabel();
+        jLabelB = new javax.swing.JLabel();
+        jLabelC = new javax.swing.JLabel();
         jPanelHelp = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPaneLoad = new javax.swing.JScrollPane();
@@ -126,6 +135,11 @@ public class StartFrame extends javax.swing.JFrame {
 
         jCheckBoxFreez.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jCheckBoxFreez.setText("Disc Freezing");
+        jCheckBoxFreez.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxFreezActionPerformed(evt);
+            }
+        });
 
         jButtonPlay.setFont(new java.awt.Font("Vafle VUT", 0, 18)); // NOI18N
         jButtonPlay.setText("PLAY");
@@ -141,38 +155,72 @@ public class StartFrame extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel2.setText("Size:");
 
+        jSpinnerI.setEnabled(false);
+
+        jSpinnerB.setEnabled(false);
+
+        jSpinnerC.setEnabled(false);
+
+        jLabelI.setFont(new java.awt.Font("Constantia", 2, 14)); // NOI18N
+        jLabelI.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelI.setText("I");
+        jLabelI.setEnabled(false);
+
+        jLabelB.setFont(new java.awt.Font("Constantia", 2, 14)); // NOI18N
+        jLabelB.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelB.setText("B");
+        jLabelB.setEnabled(false);
+
+        jLabelC.setFont(new java.awt.Font("Constantia", 2, 14)); // NOI18N
+        jLabelC.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelC.setText("C");
+        jLabelC.setEnabled(false);
+
         javax.swing.GroupLayout newGamePanelLayout = new javax.swing.GroupLayout(newGamePanel);
         newGamePanel.setLayout(newGamePanelLayout);
         newGamePanelLayout.setHorizontalGroup(
             newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(newGamePanelLayout.createSequentialGroup()
                 .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newGamePanelLayout.createSequentialGroup()
+                        .addGap(21, 26, Short.MAX_VALUE)
+                        .addComponent(jComboBoxWhite, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(jComboBoxBlack, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(newGamePanelLayout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(jButtonPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newGamePanelLayout.createSequentialGroup()
-                            .addGap(35, 35, 35)
-                            .addComponent(whiteIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(35, 35, 35)
-                            .addComponent(blackIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(9, 9, 9))
-                        .addGroup(newGamePanelLayout.createSequentialGroup()
-                            .addGap(21, 21, 21)
-                            .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(newGamePanelLayout.createSequentialGroup()
-                                    .addComponent(jComboBoxWhite, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jComboBoxBlack, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jCheckBoxFreez)))
-                        .addGroup(newGamePanelLayout.createSequentialGroup()
-                            .addGap(19, 19, 19)
-                            .addComponent(jLabel2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jSliderSize, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel1))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(newGamePanelLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSliderSize, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1))
+                            .addGroup(newGamePanelLayout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(jCheckBoxFreez)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabelI, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelB, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelC, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(4, 4, 4)
+                                .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jSpinnerB, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jSpinnerI, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jSpinnerC, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18))
+            .addGroup(newGamePanelLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(whiteIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(blackIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35))
+            .addGroup(newGamePanelLayout.createSequentialGroup()
+                .addGap(61, 61, 61)
+                .addComponent(jButtonPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         newGamePanelLayout.setVerticalGroup(
             newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -190,11 +238,27 @@ public class StartFrame extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jSliderSize, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addComponent(jCheckBoxFreez)
-                .addGap(21, 21, 21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(newGamePanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jCheckBoxFreez)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(newGamePanelLayout.createSequentialGroup()
+                        .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jSpinnerI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelI))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jSpinnerB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelB))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jSpinnerC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelC))))
+                .addGap(18, 18, 18)
                 .addComponent(jButtonPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
+                .addGap(24, 24, 24))
         );
 
         jLayeredPaneRight.add(newGamePanel);
@@ -299,16 +363,38 @@ public class StartFrame extends javax.swing.JFrame {
             System.out.println(toLoad);
             Game game = Reversi.loadFromFile(toLoad);
             java.awt.EventQueue.invokeLater(() -> {
-                new GameFrame(game).setVisible(true);
+                new GameFrame(game,false,null).setVisible(true);
             });
         }
     }//GEN-LAST:event_jListLoadMouseClicked
 
     private void jButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlayActionPerformed
+        freez = false;
+        int fr[] = new int[3];
+        if(jCheckBoxFreez.isSelected()){
+            Integer i = (Integer) jSpinnerI.getValue();
+            Integer b = (Integer) jSpinnerB.getValue();
+            Integer c = (Integer) jSpinnerC.getValue();
+            if(i==0||b==0||c==0){
+                JOptionPane.showMessageDialog(null, "Incompatible freezing value(s).\n Allowed values are between 1-1000 second.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else if((Ai) jComboBoxWhite.getSelectedItem() != Ai.human || (Ai) jComboBoxBlack.getSelectedItem() != Ai.human){
+                JOptionPane.showMessageDialog(null, "Freezing is allowed only for human vs. human mode.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }else{
+                freez = true;
+             fr[0] = i;
+             fr[1] = b;
+             fr[2] = c;
+            }
+        }
+        
         Game game = Reversi.createNewGame(jSliderSize.getValue(), (Ai) jComboBoxWhite.getSelectedItem(), (Ai) jComboBoxBlack.getSelectedItem());
+        
         java.awt.EventQueue.invokeLater(() -> {
-            new GameFrame(game).setVisible(true);
-        });
+            new GameFrame(game,freez,fr).setVisible(true);
+         });
         
     }//GEN-LAST:event_jButtonPlayActionPerformed
 
@@ -321,6 +407,26 @@ public class StartFrame extends javax.swing.JFrame {
         jPanelHelp.setVisible(true);
         newGamePanel.setVisible(false);
     }//GEN-LAST:event_jButHelpActionPerformed
+
+    private void jCheckBoxFreezActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFreezActionPerformed
+          if(jCheckBoxFreez.isSelected()){
+            jSpinnerI.setEnabled(true);
+            jSpinnerB.setEnabled(true);
+            jSpinnerC.setEnabled(true);
+            jLabelI.setEnabled(true);
+            jLabelB.setEnabled(true);
+            jLabelC.setEnabled(true);
+        }
+        else{
+            jSpinnerI.setEnabled(false);
+            jSpinnerB.setEnabled(false);
+            jSpinnerC.setEnabled(false);
+            jLabelI.setEnabled(false);
+            jLabelB.setEnabled(false);
+            jLabelC.setEnabled(false);
+        }
+  
+    }//GEN-LAST:event_jCheckBoxFreezActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel blackIcon;
@@ -335,11 +441,17 @@ public class StartFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabelB;
+    private javax.swing.JLabel jLabelC;
+    private javax.swing.JLabel jLabelI;
     private javax.swing.JLayeredPane jLayeredPaneRight;
     private javax.swing.JList jListLoad;
     private javax.swing.JPanel jPanelHelp;
     private javax.swing.JScrollPane jScrollPaneLoad;
     private javax.swing.JSlider jSliderSize;
+    private javax.swing.JSpinner jSpinnerB;
+    private javax.swing.JSpinner jSpinnerC;
+    private javax.swing.JSpinner jSpinnerI;
     private javax.swing.JPanel newGamePanel;
     private javax.swing.JLabel whiteIcon;
     // End of variables declaration//GEN-END:variables
