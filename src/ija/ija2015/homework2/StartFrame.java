@@ -3,6 +3,7 @@ package ija.ija2015.homework2;
 import ija.ija2015.homework2.game.Game;
 import ija.ija2015.homework2.game.Player.Ai;
 import java.awt.Color;
+import java.text.ParseException;
 import java.util.ArrayList;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -372,6 +373,11 @@ public class StartFrame extends javax.swing.JFrame {
         freez = false;
         int fr[] = new int[3];
         if(jCheckBoxFreez.isSelected()){
+            try { 
+                jSpinnerI.commitEdit(); jSpinnerB.commitEdit(); jSpinnerC.commitEdit();
+            }catch(ParseException e) {
+                System.out.println("Incompatible freezing value(s).");
+            }
             Integer i = (Integer) jSpinnerI.getValue();
             Integer b = (Integer) jSpinnerB.getValue();
             Integer c = (Integer) jSpinnerC.getValue();
