@@ -229,12 +229,7 @@ public abstract class Player implements Serializable{
     }
     
     void initUndo(Field field, ArrayList<Disk> toTurn) {
-        if (this.getInteligence() != Ai.human) {
-            this.undo.addToUndoLists(field, false, toTurn);
-        }
-        else {
-            this.undo.addToUndoLists(field, true, toTurn);
-        }
+        this.undo.addToUndoLists(field, toTurn);
     }
     
     public boolean undo() {
@@ -244,6 +239,11 @@ public abstract class Player implements Serializable{
         }
         return false;
     }
+
+    public Undo getUndo() {
+        return undo;
+    }
+    
     
     public static enum Ai {
 

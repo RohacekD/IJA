@@ -41,12 +41,14 @@ public class Undo implements Serializable{
         return isPossible;
     }
     
-    public void addToUndoLists(Field field, boolean player, ArrayList<Disk> list) {
+    public void addToUndoLists(Field field, ArrayList<Disk> list) {
+        if (!this.fields[putHere].isEmpty()) this.fields[putHere].clear();
+        if (!this.turnedDisks[putHere].isEmpty()) this.turnedDisks[putHere].clear();
+        
         this.fields[putHere].add(field);
         this.turnedDisks[putHere].addAll(list);
         
-        if (player)
-            this.putHere = (this.putHere + 1) % 3;
+        this.putHere = (this.putHere + 1) % 3;
     }
     
     

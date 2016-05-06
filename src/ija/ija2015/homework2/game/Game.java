@@ -222,5 +222,12 @@ public class Game implements Serializable{
     public Board getBoard() {
         return this.board;
     }
-
+    
+    public Player getOtherPlayer() {
+        if (currentPlayer == blackPlayer)
+            return whitePlayer;
+        else
+            return blackPlayer;
+    }
+    
 }
