@@ -51,12 +51,13 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
      * Konstruktor okna převezme instanci třídy Game a nastavi všechny grafické
      * náležitosti. Na základe velikosti hrací plochy zvolí vhodnou velikost
      * ikon, naplní jPanel tlačítky a vykleslí je na základě stavu (logické)
-     * desky.
+     * desky. Pokud je na tahu hráč s UI, Udělá první tah. Pokud je aktovováno
+     * zamrzání, spustí odpočet času do zamrznutí.
      *
      * @param game instance hry.
-     * @param freez zamrzání kamenů.
+     * @param freez Informace, zda bude prováděno zamrzání.
      */
-    public GameFrame(Game game,boolean freez,int[] frVal) {
+    public GameFrame(Game game, boolean freez, int[] frVal) {
         super();
         initComponents();
         if ((game.getBlackPlayer().getInteligence() != Ai.human && game.getWhitePlayer().getInteligence() != Ai.human) || freez) {
@@ -66,9 +67,10 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         this.freez = freez;
         freezTimeLeft = false;
         guiGame = game;
-        if (guiGame.getBlackPlayer().getInteligence() != Ai.human &&
-                guiGame.getWhitePlayer().getInteligence() != Ai.human)
+        if (guiGame.getBlackPlayer().getInteligence() != Ai.human
+                && guiGame.getWhitePlayer().getInteligence() != Ai.human) {
             this.jButtonUndo.setEnabled(false);
+        }
         int size = game.getBoard().getSize();
         imageBigBlack = new ImageIcon(getClass().getResource("/img/BigBlack.png"));
         imageBigWhite = new ImageIcon(getClass().getResource("/img/BigWhite.png"));
@@ -135,42 +137,43 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         updateGui(guiGame);
         aiWorker.execute();
         if (freez) {
-            
+
             new Thread() {
                 @Override
                 public void run() {
                     Random rn = new Random();
                     int i = rn.nextInt(frVal[0]);
                     int b = rn.nextInt(frVal[1]);
-                    int c = frVal[2]; 
+                    int c = frVal[2];
                     try {
-                        sleep(i*1000);
+                        sleep(i * 1000);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                   ArrayList<Disk> dob = guiGame.getBoard().disksOnBoard();
-                   Collections.shuffle(dob);                   
-                   if(dob.size()<=c) c = dob.size();
+                    ArrayList<Disk> dob = guiGame.getBoard().disksOnBoard();
+                    Collections.shuffle(dob);
+                    if (dob.size() <= c) {
+                        c = dob.size();
+                    }
                     for (int j = 0; j < c; j++) {
                         dob.get(j).setFreeze(true);
                     }
-                   
-                   
+
                     SwingUtilities.invokeLater(() -> {
                         updateGui(guiGame);
                     });
                     try {
-                        sleep(b*1000);
+                        sleep(b * 1000);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     freezTimeLeft = true;
                 }
             }.start();
-            
+
         }
-        
-        if(freez){
+
+        if (freez) {
             System.out.println(frVal[0]);
             System.out.println(frVal[1]);
             System.out.println(frVal[2]);
