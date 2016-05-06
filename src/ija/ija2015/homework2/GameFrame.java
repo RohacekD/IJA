@@ -2,6 +2,7 @@ package ija.ija2015.homework2;
 
 import ija.ija2015.homework2.board.Field;
 import ija.ija2015.homework2.game.Game;
+import ija.ija2015.homework2.game.Player;
 import ija.ija2015.homework2.game.Player.Ai;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -48,6 +49,9 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         super();
         initComponents();
         guiGame = game;
+        if (guiGame.getBlackPlayer().getInteligence() != Ai.human &&
+                guiGame.getWhitePlayer().getInteligence() != Ai.human)
+            this.jButtonUndo.setEnabled(false);
         int size = game.getBoard().getSize();
         imageBigBlack = new ImageIcon(getClass().getResource("/img/BigBlack.png"));
         imageBigWhite = new ImageIcon(getClass().getResource("/img/BigWhite.png"));
@@ -544,14 +548,31 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
             if(game.getBoard().score()[0]>game.getBoard().score()[1])
                 jLabelNextMove.setIcon(imageMenuWhite);
             else jLabelNextMove.setIcon(imageMenuBlack);
+            this.jButtonUndo.setEnabled(false);
         }
     }
     
-
+    public void doUndo(Player player) {
+        if (player.getUndo().canUndo()) {
+            player.undo();
+            guiGame.nextPlayer();
+            updateGui(guiGame);
+        }
+    }
     
     private void jButtonUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUndoActionPerformed
-        guiGame.currentPlayer().undo();
-        updateGui(guiGame);
+        Player playerUndo;
+        if (guiGame.getBlackPlayer().getInteligence() == Ai.human 
+            && guiGame.getWhitePlayer().getInteligence() == Ai.human) {
+            playerUndo = guiGame.getOtherPlayer();
+            doUndo(playerUndo);
+        }
+        else {
+            playerUndo = guiGame.getOtherPlayer();
+            doUndo(playerUndo);
+            playerUndo = guiGame.getOtherPlayer();
+            doUndo(playerUndo);
+        }
       
     }//GEN-LAST:event_jButtonUndoActionPerformed
 
