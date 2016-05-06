@@ -97,10 +97,10 @@ public class ArtificialIntelligence {
     
     
     /**
-     * funkce vraci pro kazde policko, zda se na nej muze hrac dostat
-     * @param f policko na desce
-     * @param color barva hrace
-     * @return vraci true, pokud se nejakym tahem muze hrac dane barvy dostat na dane policko
+     * Funkce vrací pro každé políčko, zda se na něj může hráč dostat
+     * @param f Políčko na desce
+     * @param color Barva hrace
+     * @return vrací true, pokud se nějakým tahem může hráč dané barvy dostat na dané políčko
      */
     public static boolean canMove(Field f, boolean color) {
         //v pripade prazdneho policka, souperova disku, nebo hrany
@@ -128,10 +128,10 @@ public class ArtificialIntelligence {
     
     
     /**
-     * funkce vypocita mobilitu pro daneho hrace
-     * @param board deska, na niz se simuluje tah
-     * @param color barva hrace
-     * @return vraci vyslednou mobilitu hrace
+     * Funkce vypočítá mobilitu pro daného hráče
+     * @param board Deska, na níž se simuluje tah
+     * @param color Barva hrace
+     * @return vrací výslednou mobilitu hráče
      */
     public static int getMobility(Board board, boolean color) {
         int mobility = 0;
@@ -145,7 +145,7 @@ public class ArtificialIntelligence {
     
     
     /**
-     * Funkce vypocita heuristickou funkci pro desku se specifickými rozměry
+     * Funkce vypočítá heuristickou funkci pro desku se specifickými rozměry
      * @param board Herní deska 
      * @param evalTable Tabulka s ohodnocením pozic pro dané rozměry desky
      * @param color Barva hráče
@@ -263,10 +263,10 @@ public class ArtificialIntelligence {
     
     
     /**
-     * funkce udrzuje tabulky vyhodnosti pozice pro kazdou z povolenych velikosti desky
-     * @param board deska, na niz probiha hra
-     * @param color barva hrace
-     * @return vraci hodnotu vysledku provedeni heuristicke funkce
+     * Funkce udržuje tabulky výhodnosti pozice pro každý typ desky (6x6, 8x8, 10x10, 12x12)
+     * @param board Deska, na níž probíhá hra
+     * @param color Barva hráče
+     * @return vrací hodnotu výsledku provedení heristické funkce
      */
     public static int getHeuristicValue(Board board, boolean color) {
         int size = board.getSize(); // podle velikosti desky se vybere pole hodnot        
@@ -344,11 +344,11 @@ public class ArtificialIntelligence {
     }
     
     /**
-     * metoda vlozi disk na konkretni desku, policko za vybraneho hrace
-     * @param board deska, na niz se vklada disk
-     * @param field policka, na ktere se vklada disk
-     * @param player hrac, jez vklada disk
-     * @return vraci true, pokud se podarilo disk vlozit
+     * Metoda vloží disk na konkrétní desku a políčko za vybraného hráče
+     * @param board Deska, na níž se vkládá disk
+     * @param field Políčko, na které se vkládá disk
+     * @param player Hráč, jenž vkládá disk
+     * @return vrací true, pokud se podařilo disk vložit
      */
     public static boolean putDiskAi(Board board, Field field, Player player) {
         int row, col;

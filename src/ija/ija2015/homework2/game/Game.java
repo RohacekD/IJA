@@ -1,7 +1,9 @@
 package ija.ija2015.homework2.game;
 import ija.ija2015.homework2.board.Board;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
@@ -20,7 +22,8 @@ public class Game implements Serializable{
     private boolean otherCantPlay = true;
     private boolean ended = false;
     private int counts[] = new int[2];
-
+    
+    
     /**
      * Inicializuje hru.
      *
@@ -33,16 +36,6 @@ public class Game implements Serializable{
         this.currentPlayer = null;
     }
     
-    /**
-     * copy konstruktor
-     * @param game  Hra ke zkopirovani
-     */
-    public Game(Game game) {
-        this.board = game.board;
-        this.whitePlayer = game.whitePlayer;
-        this.blackPlayer = game.blackPlayer;
-        this.currentPlayer = game.currentPlayer;
-    }
     
     /**
      * Přidá hráče a současně vyvolá jeho inicializaci. Pokud hráč dané barvy
@@ -66,7 +59,8 @@ public class Game implements Serializable{
         }
         return false;
     }
-
+    
+    
     /**
      * Vrátí aktuálního hráče, který je na tahu.
      *
@@ -76,19 +70,34 @@ public class Game implements Serializable{
     public Player currentPlayer() {
         return this.currentPlayer;
     }
-
+    
+    
+    /**
+     *  Vrátí bílého hráče.
+     * @return Bílý hráč
+     */
     public Player getWhitePlayer() {
         return whitePlayer;
     }
-
+    
+    
+    /**
+     * Vrátí černého hráče.
+     * @return Černý hráč
+     */
     public Player getBlackPlayer() {
         return blackPlayer;
     }
-
+    
+    
+    /**
+     * Nastaví aktuálního hráče na hráče, který je předán jako parametr.
+     * Využívá se pouze u AI u minimaxu.
+     * @param currentPlayer Hráč, jenž bude nastaven jako aktuální
+     */
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
-    
     
     
     /**
@@ -105,6 +114,12 @@ public class Game implements Serializable{
         return this.currentPlayer;
     }
     
+    
+    /**
+     * Funkce slouží k zápisu do souboru.
+     * @param name  Název souboru
+     * @return true, pokud se podařil zápis
+     */
     public boolean writeToFile(String name) {
         try {
             File dir = new File("saves");
@@ -122,12 +137,16 @@ public class Game implements Serializable{
             System.out.println("Done");
             return true;
 
-        } catch (Exception ex) {
+        } catch (HeadlessException | IOException ex) {
             ex.printStackTrace();
             return false;
         }
     }
     
+    
+    /**
+     * Metoda spouští hru v textové verzi. Využíváno hlavně pro debug.
+     */
     public void play() {
         Scanner sc = new Scanner(System.in);
         while (!ended) {
@@ -207,7 +226,15 @@ public class Game implements Serializable{
             System.out.println(">>>>WHITE WIN<<<<");
         }
     }
-
+    
+    
+    /**
+     * Nastaví aktuálního hráče na hráče, jenž má barvu, kterou funkce přebírá 
+     * parametrem. Využíváno pouze ve třídě AiPlayer v mětodě putDisk. 
+     * Zajišťuje, aby po simulaci hry v minimaxu táhnul správný hráč.
+     * 
+     * @param color Barva hráče
+     */
     public void setPlayerWithColor(boolean color) {
         if (this.currentPlayer.white != color) {
             this.nextPlayer();
@@ -223,6 +250,11 @@ public class Game implements Serializable{
         return this.board;
     }
     
+    
+    /**
+     * Vrátí referenci na hráče, jenž není zrovna aktuálním hráčem.
+     * @return hráč, který není na tahu
+     */
     public Player getOtherPlayer() {
         if (currentPlayer == blackPlayer)
             return whitePlayer;

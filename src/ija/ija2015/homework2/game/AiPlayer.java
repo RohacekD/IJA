@@ -38,7 +38,6 @@ public class AiPlayer extends Player implements Serializable{
                         return putDisk(tmp);
                 else return false;
             case minMax:
-                Game gameTmp = new Game(game);
                 boolean playerColor = game.currentPlayer().white;
                 tmp = ArtificialIntelligence.minMaxAI(game.getBoard(), this, 0, game, this.white, true);
                 System.out.println("puvodni deska");
@@ -54,7 +53,10 @@ public class AiPlayer extends Player implements Serializable{
 
 
     }
-
+    
+    /**
+     * @return vrací typ inteligence
+     */
     @Override
     public Ai getInteligence() {
        return aiType;
