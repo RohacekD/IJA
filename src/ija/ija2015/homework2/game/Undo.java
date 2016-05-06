@@ -20,7 +20,7 @@ public class Undo implements Serializable{
     ArrayList<Disk>[] turnedDisks;
     int putHere;
     
-    
+    @SuppressWarnings("unchecked")
     public Undo() {
         fields = (ArrayList<Field>[])new ArrayList[3];
         turnedDisks = (ArrayList<Disk>[]) new ArrayList[3];
