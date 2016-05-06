@@ -1,5 +1,6 @@
 package ija.ija2015.homework2;
 
+import ija.ija2015.homework2.board.Disk;
 import ija.ija2015.homework2.board.Field;
 import ija.ija2015.homework2.game.Game;
 import ija.ija2015.homework2.game.Player;
@@ -8,7 +9,10 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import static java.lang.Thread.sleep;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -35,7 +39,13 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
     private ImageIcon usingWhite;
     private ImageIcon imageMenuBlack;
     private ImageIcon imageMenuWhite;
+    private ImageIcon imageFrBlack;
+    private ImageIcon imageFrWhite;
+    private ImageIcon usingFrBlack;
+    private ImageIcon usingFrWhite;
     private SwingWorker aiWorker;
+    private boolean freezTimeLeft;
+    private boolean freez;
 
     /**
      * Konstruktor okna převezme instanci třídy Game a nastavi všechny grafické
@@ -44,10 +54,17 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
      * desky.
      *
      * @param game instance hry.
+     * @param freez zamrzání kamenů.
      */
-    public GameFrame(Game game) {
+    public GameFrame(Game game,boolean freez,int[] frVal) {
         super();
         initComponents();
+        if ((game.getBlackPlayer().getInteligence() != Ai.human && game.getWhitePlayer().getInteligence() != Ai.human) || freez) {
+            //pokud hrají dvě uměle inteligence nebo je aktivní zamrzaní, nelze provádět undo
+            jButtonUndo.setEnabled(false);
+        }
+        this.freez = freez;
+        freezTimeLeft = false;
         guiGame = game;
         if (guiGame.getBlackPlayer().getInteligence() != Ai.human &&
                 guiGame.getWhitePlayer().getInteligence() != Ai.human)
@@ -57,6 +74,8 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         imageBigWhite = new ImageIcon(getClass().getResource("/img/BigWhite.png"));
         imageMenuBlack = new ImageIcon(getClass().getResource("/img/black.png"));
         imageMenuWhite = new ImageIcon(getClass().getResource("/img/white.png"));
+        imageFrBlack = new ImageIcon(getClass().getResource("/img/frBlack.png"));
+        imageFrWhite = new ImageIcon(getClass().getResource("/img/frWhite.png"));
         aiWorker = new SwingWorker<String, Void>() {
             @Override
             protected String doInBackground() throws Exception {
@@ -73,18 +92,26 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
             case 6:
                 usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
                 usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
+                usingFrBlack = new ImageIcon(imageFrBlack.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
+                usingFrWhite = new ImageIcon(imageFrWhite.getImage().getScaledInstance(99, 99, java.awt.Image.SCALE_SMOOTH));
                 break;
             case 8:
                 usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
                 usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
+                usingFrBlack = new ImageIcon(imageFrBlack.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
+                usingFrWhite = new ImageIcon(imageFrWhite.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
                 break;
             case 10:
                 usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
                 usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
+                usingFrBlack = new ImageIcon(imageFrBlack.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
+                usingFrWhite = new ImageIcon(imageFrWhite.getImage().getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH));
                 break;
             case 12:
                 usingBlack = new ImageIcon(imageBigBlack.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
                 usingWhite = new ImageIcon(imageBigWhite.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
+                usingFrBlack = new ImageIcon(imageFrBlack.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
+                usingFrWhite = new ImageIcon(imageFrWhite.getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
                 break;
 
         }
@@ -107,7 +134,61 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         getContentPane().setBackground(Color.DARK_GRAY);
         updateGui(guiGame);
         aiWorker.execute();
+        if (freez) {
+            
+            new Thread() {
+                @Override
+                public void run() {
+                    Random rn = new Random();
+                    int i = rn.nextInt(frVal[0]);
+                    int b = rn.nextInt(frVal[1]);
+                    int c = frVal[2]; 
+                    try {
+                        sleep(i*1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                   ArrayList<Disk> dob = guiGame.getBoard().disksOnBoard();
+                   Collections.shuffle(dob);                   
+                   if(dob.size()<=c) c = dob.size();
+                    for (int j = 0; j < c; j++) {
+                        dob.get(j).setFreeze(true);
+                    }
+                   
+                   
+                    SwingUtilities.invokeLater(() -> {
+                        updateGui(guiGame);
+                    });
+                    try {
+                        sleep(b*1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    freezTimeLeft = true;
+                }
+            }.start();
+            
+        }
+        
+        if(freez){
+            System.out.println(frVal[0]);
+            System.out.println(frVal[1]);
+            System.out.println(frVal[2]);
+        }
 
+    }
+    
+    /**
+     * Zjistí, zda je aktivované zamrzání disků a zda už vypršel čas zmražení.
+     * Pokud ano, všechny disky odmrazí.
+     */
+    void unfreezeAll(){
+        if(freez && freezTimeLeft)
+        for (Disk tmp : guiGame.getBoard().disksOnBoard()) {
+            if (tmp.isFreeze()) {
+                tmp.setFreeze(false);
+            }
+        }
     }
 
     /**
@@ -130,6 +211,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                 guiGame.nextPlayer();
                 if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty() || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
                     guiGame.nextPlayer();
+                    unfreezeAll();
                     otherCantPlay = true;
 
                 }
@@ -137,6 +219,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
             } else if (guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
                 System.out.println("Dosly disky!");
                 guiGame.nextPlayer();
+                unfreezeAll();
                 if (otherCantPlay) {
                     ended = true;
                     System.out.println("KONEC - UI move");
@@ -146,9 +229,11 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
             } else {
                 guiGame.currentPlayer().putDisk(guiGame);
                 guiGame.nextPlayer();
+                unfreezeAll();
                 otherCantPlay = false;
                 if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty() || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
                     guiGame.nextPlayer();
+                    unfreezeAll();
                     otherCantPlay = true;
 
                 }
@@ -160,74 +245,6 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
 
     }
 
-        public void makeUserMoves(int x, int y) {
-        if (guiGame.currentPlayer().getInteligence() == Ai.human && !ended) {
-            if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()) {
-                System.out.println("Neni kam hrat user move");
-                if (otherCantPlay) {
-                    ended = true;
-                    System.out.println("KONEC - user move");
-                } else {
-                    guiGame.nextPlayer();
-                    otherCantPlay = true;
-                    SwingWorker myWorker = new SwingWorker<String, Void>() {
-                        @Override
-                        protected String doInBackground() throws Exception {
-                            try {
-                                makeMove();
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            return null;
-                        }
-                    };
-                    myWorker.execute();
-                }
-                updateGui(guiGame);
-
-            } else if ((guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks())) {
-                System.out.println("Dosly disky!");
-                guiGame.nextPlayer();
-                if (otherCantPlay) {
-                    ended = true;
-                    System.out.println("KONEC - user move");
-
-                }
-                guiGame.nextPlayer();
-                otherCantPlay = true;
-                aiWorker.execute();
-                updateGui(guiGame);
-            } else {
-                otherCantPlay = false;
-                if (guiGame.currentPlayer().canPutDisk(guiGame.getBoard().getField(x, y))) {
-                    guiGame.currentPlayer().putDisk(guiGame.getBoard().getField(x, y));
-                    guiGame.nextPlayer();
-                    SwingUtilities.invokeLater(() -> {
-                        updateGui(guiGame);
-                    });
-
-                    SwingWorker myWorker = new SwingWorker<String, Void>() {
-                        @Override
-                        protected String doInBackground() throws Exception {
-                            try {
-                                makeMove();
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            return null;
-                        }
-                    };
-                    myWorker.execute();
-
-                }
-
-            }
-
-        }
-        if (ended) {
-            updateGui(guiGame);
-        }
-    }
     /**
      * Tah uživatele. Metoda převezme souřadnice a pokusí se na ně umísit kámen
      * Pokud aktuální hráč nemá kam táhnout nebo mu došly disky, předá tah
@@ -244,12 +261,14 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                         || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()){
                     //nemám disky nebo nemám kam hrát
                     guiGame.nextPlayer();
+                    unfreezeAll();
                     otherCantPlay = true;
                     }
                 else{ //muzu polozit a tak polozím
                     if (guiGame.currentPlayer().canPutDisk(guiGame.getBoard().getField(x, y))) {
                     guiGame.currentPlayer().putDisk(guiGame.getBoard().getField(x, y));
                     guiGame.nextPlayer();
+                    unfreezeAll();
                     }
                 }
                 if ((guiGame.getBlackPlayer().getLegals(guiGame.getBoard()).isEmpty()
@@ -518,20 +537,34 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    /**
+     * Tato metoda projde logické pole hry a podle výsledků nastaví kameny a informační panel GUI.
+     * @param game 
+     */
     private void updateGui(Game game){
         Field board[][] = game.getBoard().getDesk();
 
         for (int i = 0; i < guiBoard.length; i++) {
             for (int j = 0; j < guiBoard.length; j++) {
-                if(!board[i+1][j+1].isEmpty()){
-                    if(board[i+1][j+1].getDisk().isWhite()){
-                        guiBoard[i][j].setIcon(usingWhite);
+                if (!board[i + 1][j + 1].isEmpty()) {
+                    if (board[i + 1][j + 1].getDisk().isWhite()) {
+                        if (board[i + 1][j + 1].getDisk().isFreeze()) {
+                            guiBoard[i][j].setIcon(usingFrWhite);
+                        } else {
+                            guiBoard[i][j].setIcon(usingWhite);
+                        }
+
+                    } else {
+                        if (board[i + 1][j + 1].getDisk().isFreeze()) {
+                            guiBoard[i][j].setIcon(usingFrBlack);
+                        } else {
+                            guiBoard[i][j].setIcon(usingBlack);
+                        }
                     }
-                    else{
-                        guiBoard[i][j].setIcon(usingBlack);
-                    }     
-                }else guiBoard[i][j].setIcon(null);
-                
+                } else {
+                    guiBoard[i][j].setIcon(null);
+                }
+
             }
         }
         int count = game.getBoard().getRules().numberDisks();

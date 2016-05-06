@@ -1,6 +1,7 @@
 package ija.ija2015.homework2.board;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Třída reprezentující hrací desku. Deska má velikost (rozměr) N a rozlišuje
@@ -139,7 +140,7 @@ public class Board implements Serializable {
     }
 
     /**
-     * Počet kamenů obou hráčů.
+     *  Zjistí počet kamenů obou hráčů. 
      *
      * @return Vrátí počet bílých a čených kamenů v dvouprvkovém poli ve tvaru
      * {}
@@ -161,6 +162,22 @@ public class Board implements Serializable {
         }
         int tmp[] = {w, b};
         return tmp;
+    }
+    /**
+     * Metoda projde herní pole a všechny aktuálně položené kameny vloží do seznamu.
+     * @return Vrací ArrayList všech kamenů na desce. 
+     */
+    public ArrayList<Disk> disksOnBoard(){
+        ArrayList<Disk> dob = new ArrayList();
+        for (int i = 1; i < this.getSize() + 1; i++) {
+            for (int j = 1; j < this.getSize() + 1; j++) {
+                if (!this.desk[i][j].isEmpty()) {
+                    dob.add(this.desk[i][j].getDisk());
+                }
+            }
+
+        }
+        return dob;
     }
 
 }
