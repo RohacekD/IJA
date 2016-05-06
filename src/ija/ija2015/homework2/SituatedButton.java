@@ -1,19 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ija.ija2015.homework2;
 
 import javax.swing.JButton;
 
 /**
+ * Jbutton, který zná svou pozici v poli tlačetek grafického rozhraní.
  *
- * @author Dalibor Jelinek
+ * @author xjelin42, xpavlu08
  */
+public class SituatedButton extends JButton {
 
-public class SituatedButton extends JButton{
-    
     private final int x;
     private final int y;
 
@@ -22,14 +17,13 @@ public class SituatedButton extends JButton{
         this.x = x;
         this.y = y;
     }
-    
-    public int getXpos(){
+
+    public int getXpos() {
         return x;
     }
-    
-        public int getYpos(){
+
+    public int getYpos() {
         return y;
     }
-    
-    
+
 }

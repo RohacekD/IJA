@@ -223,9 +223,6 @@
                   <Connection code="new javax.swing.DefaultComboBoxModel(Ai.values())" type="code"/>
                 </Property>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxWhiteActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JComboBox" name="jComboBoxBlack">
               <Properties>

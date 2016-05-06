@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ija.ija2015.homework2;
+
 import ija.ija2015.homework2.game.Game;
 import ija.ija2015.homework2.game.Player.Ai;
 import java.awt.Color;
@@ -14,15 +10,16 @@ import javax.swing.JList;
 import javax.swing.SwingConstants;
 
 /**
+ * Třída hlavního herního menu.
  *
- * @author Dalibor Jelinek
+ * @author xjelin42, xpavlu08
  */
 public class StartFrame extends javax.swing.JFrame {
+
     DefaultListModel<String> model;
-    
 
     /**
-     * Creates new form StartFrame
+     * Konstruktor inicializuje vzhled okna.
      */
     public StartFrame() {
         initComponents();
@@ -35,13 +32,8 @@ public class StartFrame extends javax.swing.JFrame {
         renderer.setHorizontalAlignment(SwingConstants.CENTER);
         jListLoad.setFixedCellHeight(50);
         model = new DefaultListModel<>();
-        
-        
+
     }
-    
-    
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -115,11 +107,6 @@ public class StartFrame extends javax.swing.JFrame {
 
         jComboBoxWhite.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jComboBoxWhite.setModel(new javax.swing.DefaultComboBoxModel(Ai.values()));
-        jComboBoxWhite.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxWhiteActionPerformed(evt);
-            }
-        });
 
         jComboBoxBlack.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jComboBoxBlack.setModel(new javax.swing.DefaultComboBoxModel(Ai.values()));
@@ -291,7 +278,6 @@ public class StartFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButNewGameActionPerformed
 
     private void jButtonLoadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoadGameActionPerformed
-        
         ArrayList<String> names = Reversi.getSavedGames();
         model.clear();
         for (String s : names) {
@@ -306,28 +292,22 @@ public class StartFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonLoadGameActionPerformed
 
     private void jListLoadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListLoadMouseClicked
-        JList list = (JList)evt.getSource();
-    if (evt.getClickCount() == 2) {
-        int index = list.locationToIndex(evt.getPoint());
-        String toLoad = (String)list.getModel().getElementAt(index);
-        System.out.println(toLoad);
-        Game game = Reversi.loadFromFile(toLoad);
-                     java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
+        JList list = (JList) evt.getSource();
+        if (evt.getClickCount() == 2) {
+            int index = list.locationToIndex(evt.getPoint());
+            String toLoad = (String) list.getModel().getElementAt(index);
+            System.out.println(toLoad);
+            Game game = Reversi.loadFromFile(toLoad);
+            java.awt.EventQueue.invokeLater(() -> {
                 new GameFrame(game).setVisible(true);
-            }
-        });
-    }
+            });
+        }
     }//GEN-LAST:event_jListLoadMouseClicked
 
     private void jButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlayActionPerformed
         Game game = Reversi.createNewGame(jSliderSize.getValue(), (Ai) jComboBoxWhite.getSelectedItem(), (Ai) jComboBoxBlack.getSelectedItem());
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new GameFrame(game).setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new GameFrame(game).setVisible(true);
         });
         
     }//GEN-LAST:event_jButtonPlayActionPerformed
@@ -336,50 +316,11 @@ public class StartFrame extends javax.swing.JFrame {
         jLabel1.setText(jSliderSize.getValue()+"");
     }//GEN-LAST:event_jSliderSizeStateChanged
 
-    private void jComboBoxWhiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxWhiteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBoxWhiteActionPerformed
-
     private void jButHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButHelpActionPerformed
         jScrollPaneLoad.setVisible(false);
         jPanelHelp.setVisible(true);
         newGamePanel.setVisible(false);
     }//GEN-LAST:event_jButHelpActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new StartFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel blackIcon;

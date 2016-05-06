@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ija.ija2015.homework2;
 
 import ija.ija2015.homework2.board.Board;
@@ -18,10 +13,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author Dalibor Jelinek
+ * @author xjelin42, xpavlu08
  */
 public class Reversi {
 
@@ -52,41 +48,45 @@ public class Reversi {
         return game;
     }
 
-        public static Game loadFromFile(String name){
+    public static Game loadFromFile(String name) {
         Game game;
         try {
 
-            FileInputStream fin = new FileInputStream("./saves/"+ name);
+            FileInputStream fin = new FileInputStream("./saves/" + name);
             ObjectInputStream ois = new ObjectInputStream(fin);
             game = (Game) ois.readObject();
             ois.close();
 
             return game;
 
-        } catch (IOException | ClassNotFoundException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+             JOptionPane.showMessageDialog(null, "Incompatible file", "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
-        public static ArrayList<String> getSavedGames(){
-            ArrayList<String> result = new ArrayList<>();
-           
-            File folder = new File("saves");
-            File[] listOfFiles = folder.listFiles();
-            if (!folder.isDirectory()){
 
-                return result;
-                
-            } 
+    public static ArrayList<String> getSavedGames() {
+        ArrayList<String> result = new ArrayList<>();
 
-            for (int i = 0; i < folder.listFiles().length; i++) {
-                    System.out.println(listOfFiles[i].getName());
-                    if(listOfFiles[i].isFile()) result.add(listOfFiles[i].getName());
-            }
+        File folder = new File("saves");
+        File[] listOfFiles = folder.listFiles();
+        if (!folder.isDirectory()) {
+
             return result;
+
         }
-    public static void runMenu(){
-                  try {
+
+        for (int i = 0; i < folder.listFiles().length; i++) {
+            System.out.println(listOfFiles[i].getName());
+            if (listOfFiles[i].isFile()) {
+                result.add(listOfFiles[i].getName());
+            }
+        }
+        return result;
+    }
+
+    public static void runMenu() {
+        try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -102,26 +102,25 @@ public class Reversi {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-              
-             JFrame tmp =new StartFrame();
-             tmp.setLocationRelativeTo(null);
-             tmp.setVisible(true);
-            
+
+                JFrame tmp = new StartFrame();
+                tmp.setLocationRelativeTo(null);
+                tmp.setVisible(true);
+
             }
         });
     }
+
     public static void main(String[] args) {
 
         runMenu();
         //Game game = createNewGame(6, Ai.human, Ai.rand);
-        
+
         //Game game = loadFromFile("save.sv");
-
         //game.play();
-
     }
 
 }
