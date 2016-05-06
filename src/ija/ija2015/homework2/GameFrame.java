@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -234,23 +235,28 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
      */
     public void makeUserMove(int x, int y) {
         if (guiGame.currentPlayer().getInteligence() == Ai.human && !ended) {
-            if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()
-                    || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
-                
-                otherCantPlay = false;
-                guiGame.nextPlayer();
-                if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty()
-                        || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
+
+                if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty() 
+                        || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()){
+                    //nemám disky nebo nemám kam hrát
+                    guiGame.nextPlayer();
+                    otherCantPlay = true;
+                    }
+                else{ //muzu polozit a tak polozím
+                    if (guiGame.currentPlayer().canPutDisk(guiGame.getBoard().getField(x, y))) {
+                    guiGame.currentPlayer().putDisk(guiGame.getBoard().getField(x, y));
+                    guiGame.nextPlayer();
+                    }
+                }
+                if ((guiGame.getBlackPlayer().getLegals(guiGame.getBoard()).isEmpty()
+                        || (guiGame.getBlackPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()))
+                        && (guiGame.getWhitePlayer().getLegals(guiGame.getBoard()).isEmpty()
+                        || (guiGame.getWhitePlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()))) {
+                    //pokud ani jeden nemuze hrat, hra skoncila
                     ended = true;
                     updateGui(guiGame);
                     return;
-                }
-            }
-            else {
-                otherCantPlay = false;
-                if (guiGame.currentPlayer().canPutDisk(guiGame.getBoard().getField(x, y))) {
-                    guiGame.currentPlayer().putDisk(guiGame.getBoard().getField(x, y));
-                    guiGame.nextPlayer();
+                } //protihrac urcite muze hrat 
                     SwingUtilities.invokeLater(() -> {
                         updateGui(guiGame);
                     });
@@ -268,8 +274,8 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                     };
                     myWorker.execute();
 
-                }
-            }
+                
+
         }
     }
 
