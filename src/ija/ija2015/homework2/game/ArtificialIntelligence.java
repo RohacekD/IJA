@@ -6,6 +6,7 @@ import ija.ija2015.homework2.board.Field;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 /**
  * Třída obsahuje statické metody, které reprezentují jednotlivé algoritmy umělé inteligence.
  * @author xpavlu08, xjelin42
@@ -29,6 +30,7 @@ public class ArtificialIntelligence {
         }
     }
     
+    
     /**
      * Výber vhodného pole pomocí metody MinMax
      * @param board Herní deska.
@@ -46,19 +48,17 @@ public class ArtificialIntelligence {
         
         //ziskani policek, kam lze vlozit disk
         ArrayList<Field> moves = plr.getLegals(board);
-        /*if (moves.size() == 0) {
-            board.toString();
-            System.out.println("NENI KAM VLOZIT DISK");
-        }*/
+
         
         //prochazim pres vsechny mozne pozice
         for (Field currField : moves) {
              
-            //vytvoreni kopie desky
+            //vytvoreni kopie desky - hluboka kopie
             Board boardTmp = new Board(board);
             
+            //vlozeni disku na vybranou pozici
             if (! putDiskAi(boardTmp, currField, plr))
-                System.out.println("VLOZENI DISKU SE NEZDARILO");;
+                System.out.println("VLOZENI DISKU SE NEZDARILO");
             
            /* System.out.println("-----------DEBUGGING-----------");
             boardTmp.toString();
@@ -77,8 +77,10 @@ public class ArtificialIntelligence {
                 currField.setRating(nextMove.getRating());
             }
             
+            //pokud zati neni vybrane policko, vyberu aktualni
             if (finalMove == null)
                 finalMove = currField;
+            //podle hloubky vybiram policko s nejlepsi ohodnocenim
             else {
                 if (depth % 2 == 0) {
                     if (finalMove.getRating() < currField.getRating())
@@ -93,6 +95,13 @@ public class ArtificialIntelligence {
         return finalMove;
     }
     
+    
+    /**
+     * funkce vraci pro kazde policko, zda se na nej muze hrac dostat
+     * @param f policko na desce
+     * @param color barva hrace
+     * @return vraci true, pokud se nejakym tahem muze hrac dane barvy dostat na dane policko
+     */
     public static boolean canMove(Field f, boolean color) {
         //v pripade prazdneho policka, souperova disku, nebo hrany
         boolean result = false;
@@ -117,6 +126,13 @@ public class ArtificialIntelligence {
         return result;
     }
     
+    
+    /**
+     * funkce vypocita mobilitu pro daneho hrace
+     * @param board deska, na niz se simuluje tah
+     * @param color barva hrace
+     * @return vraci vyslednou mobilitu hrace
+     */
     public static int getMobility(Board board, boolean color) {
         int mobility = 0;
         for (int i = 1; i < board.getSize() + 1; i++) {
@@ -126,6 +142,7 @@ public class ArtificialIntelligence {
         }
         return mobility;
     }
+    
     
     /**
      * Funkce vypocita heuristickou funkci pro desku se specifickými rozměry
@@ -244,10 +261,18 @@ public class ArtificialIntelligence {
         return result;
     }
     
+    
+    /**
+     * funkce udrzuje tabulky vyhodnosti pozice pro kazdou z povolenych velikosti desky
+     * @param board deska, na niz probiha hra
+     * @param color barva hrace
+     * @return vraci hodnotu vysledku provedeni heuristicke funkce
+     */
     public static int getHeuristicValue(Board board, boolean color) {
         int size = board.getSize(); // podle velikosti desky se vybere pole hodnot        
         int result_desk = 0;
         
+        /* rozhodovaci tabulky s ohodnocenim */
         int[][] eval_table_v6 = {
             {40, -15, 15, 15, -15, 40},
             {-15, -30, -7, -7, -30, -15},
@@ -257,7 +282,6 @@ public class ArtificialIntelligence {
             {40, -15, 15, 15, -15, 40},
         };
         
-        /* rozhodovaci tabulky s ohodnocenim */
         int[][] eval_table_v8 = {
             {40,  -8,  8,  6,  6,  8,  -8, 40},
             {-8, -24, -4, -3, -3, -4, -24, -8},
@@ -319,7 +343,13 @@ public class ArtificialIntelligence {
         return result_desk;
     }
     
-    
+    /**
+     * metoda vlozi disk na konkretni desku, policko za vybraneho hrace
+     * @param board deska, na niz se vklada disk
+     * @param field policka, na ktere se vklada disk
+     * @param player hrac, jez vklada disk
+     * @return vraci true, pokud se podarilo disk vlozit
+     */
     public static boolean putDiskAi(Board board, Field field, Player player) {
         int row, col;
         row = field.getRow();
