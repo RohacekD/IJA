@@ -75,14 +75,17 @@ public abstract class Player implements Serializable{
             if (field.isEmpty()) {
                 for (Field.Direction dir : Field.Direction.values()) {
                     if (field.nextField(dir).isEmpty() || field.nextField(dir).getDisk() == null
-                            || field.nextField(dir).getDisk().isWhite() == this.white) {
+                            || field.nextField(dir).getDisk().isWhite() == this.white ||
+                            field.nextField(dir).getDisk().isFreeze()) {
                     } else {
                         chosenWay = dir;
                         boolean result_tmp = false;
                         tmp2 = field.nextField(chosenWay);
                         toTurnOver.add(tmp2.getDisk());
 
-                        while (!tmp2.nextField(chosenWay).isEmpty() && tmp2.nextField(chosenWay).canPutDisk(null) != false) {
+                        while (!tmp2.nextField(chosenWay).isEmpty() &&
+                                tmp2.nextField(chosenWay).canPutDisk(null) != false &&
+                                !tmp2.nextField(chosenWay).getDisk().isFreeze()) {
                             if (tmp2.nextField(chosenWay).getDisk().isWhite() == this.white) {
                                 result = true;
                                 removeFromIndex = toTurnOver.size();
