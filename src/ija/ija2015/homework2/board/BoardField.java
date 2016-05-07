@@ -32,7 +32,13 @@ public class BoardField implements Field, Serializable {
             this.surrounding[i] = null;
         }
     }
-
+    
+    
+    /**
+     * Copy konstruktor jedntotlivých políček na desce. Provádí hlubokou kopii.
+     * Využívá ho konstruktor Boardu.
+     * @param field Políčko ke zkopírování.
+     */
     public BoardField(BoardField field) {
         this.row = field.row;
         this.cols = field.cols;
@@ -45,6 +51,7 @@ public class BoardField implements Field, Serializable {
         }
     }
 
+    
     /**
      * Vygeneruje textovou reprezentaci herního pole.
      *
@@ -57,6 +64,7 @@ public class BoardField implements Field, Serializable {
         return tmp;
     }
 
+    
     /**
      * Přidá sousední pole field v daném směru dirs.
      *
@@ -68,6 +76,7 @@ public class BoardField implements Field, Serializable {
         surrounding[dirs.ordinal()] = field;
     }
 
+    
     /**
      * Vrátí sousední pole v daném směru dirs.
      *
@@ -79,6 +88,7 @@ public class BoardField implements Field, Serializable {
         return surrounding[dirs.ordinal()];
     }
 
+    
     /**
      * Vloží na pole kámen. Jednou vložený kámen již nelze odebrat.
      *
@@ -95,6 +105,7 @@ public class BoardField implements Field, Serializable {
         }
     }
 
+    
     /**
      * Vrací kámen, který je vložen na pole.
      *
@@ -105,6 +116,7 @@ public class BoardField implements Field, Serializable {
         return this.disk;
     }
 
+    
     @Override
     public boolean equals(java.lang.Object obj) {
         if (obj instanceof BoardField) {
@@ -122,6 +134,7 @@ public class BoardField implements Field, Serializable {
             return false;
         }
     }
+    
 
     @Override
     public int hashCode() {
@@ -131,6 +144,7 @@ public class BoardField implements Field, Serializable {
         return hash;
     }
 
+    
     /**
      * Test, zda je možné vložit na pole kámen.
      *
@@ -141,6 +155,7 @@ public class BoardField implements Field, Serializable {
     public boolean canPutDisk(Disk disk) {
         return true;
     }
+    
 
     /**
      * Test, zda je pole prázdné.
@@ -152,26 +167,51 @@ public class BoardField implements Field, Serializable {
         return this.disk == null;
     }
 
+    
+    /**
+     * Získání informací o ohodnocení daného políčka.
+     * Využívá minimax.
+     * @return ohodnocení políčka
+     */
     @Override
     public int getRating() {
         return this.rating;
     }
 
+    
+    /**
+     * Nastavení ohodnocení políčka. Využívá minimax.
+     * @param value Nová hodnota políčka
+     */
     @Override
     public void setRating(int value) {
         this.rating = value;
     }
 
+    
+    /**
+     * Získá sloupec, na němž se políčko nachází.
+     * @return číslo sloupce
+     */
     @Override
     public int getColumn() {
         return this.cols;
     }
-
+    
+    
+    /**
+     * Získá řádek, na němž se políčko nachází.
+     * @return číslo řádku
+     */
     @Override
     public int getRow() {
         return this.row;
     }
 
+    
+    /**
+     * nastaví na políčku disk na NULL
+     */
     @Override
     public void setDiskToNull() {
         this.disk = null;

@@ -90,17 +90,28 @@ public class BorderField implements Field, Serializable {
     public void setRating(int value) {
         
     }
-
+    
+    /**
+     * Záměrně vrací špatnou hodnotu.
+     * @return -1
+     */
     @Override
     public int getColumn() {
         return -1;
     }
-
+    
+    /**
+     * Záměrně vrací špatnou hodnotu.
+     * @return -1
+     */
     @Override
     public int getRow() {
         return -1;
     }
-
+    
+    /**
+     * nedělá nic
+     */
     @Override
     public void setDiskToNull() {
     }

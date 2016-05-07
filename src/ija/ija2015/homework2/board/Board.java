@@ -49,7 +49,13 @@ public class Board implements Serializable {
             }
         }
     }
-
+    
+    
+    /**
+     * Copy konstruktor desky, jenž provádí hlubokou kopii. Využívá se při simulaci
+     * pohzbů u minimaxu.
+     * @param board deska, která se kopíruje
+     */
     public Board(Board board) {
         this.desk = new Field[board.getSize() + 2][board.getSize() + 2];
         this.rules = board.rules;
@@ -78,6 +84,7 @@ public class Board implements Serializable {
         }
     }
 
+    
     /**
      * Vrací velikost (rozměr) desky.
      *
@@ -91,6 +98,7 @@ public class Board implements Serializable {
         return this.desk[row][col];
     }
 
+    
     /**
      * Vrací objekt pravidel.
      *
@@ -99,6 +107,7 @@ public class Board implements Serializable {
     public Rules getRules() {
         return this.rules;
     }
+    
 
     /**
      * Vrací 2D pole herních polí.
@@ -108,6 +117,7 @@ public class Board implements Serializable {
     public Field[][] getDesk() {
         return desk;
     }
+    
 
     /**
      * Generuje textový formát hrací desky.
@@ -138,6 +148,7 @@ public class Board implements Serializable {
         System.out.println(result);
         return result;
     }
+    
 
     /**
      *  Zjistí počet kamenů obou hráčů. 
@@ -163,6 +174,8 @@ public class Board implements Serializable {
         int tmp[] = {w, b};
         return tmp;
     }
+    
+    
     /**
      * Metoda projde herní pole a všechny aktuálně položené kameny vloží do seznamu.
      * @return Vrací ArrayList všech kamenů na desce. 

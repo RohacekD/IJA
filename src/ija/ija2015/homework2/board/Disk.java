@@ -15,6 +15,7 @@ public class Disk implements Serializable{
     private boolean isWhite;
     private boolean isFreeze;
 
+    
     /**
      * Inicializace kamene.
      *
@@ -23,10 +24,16 @@ public class Disk implements Serializable{
     public Disk(boolean white) {
         this.isWhite = white;
     }
-
+    
+    
+    /**
+     * Copy konstruktor disku.
+     * @param disk Disk ke zkopírování
+     */
     public Disk(Disk disk) {
         this.isWhite = disk.isWhite;
     }
+    
     
     /**
      * Otočení (změna barvy) kamene.
@@ -35,6 +42,7 @@ public class Disk implements Serializable{
         this.isWhite = this.isWhite != true;
     }
 
+    
     /**
      * Test, zda je kámen bílý.
      *
@@ -43,6 +51,7 @@ public class Disk implements Serializable{
     public boolean isWhite() {
         return this.isWhite == true;
     }
+    
 
     @Override
     public boolean equals(java.lang.Object obj) {
@@ -53,6 +62,7 @@ public class Disk implements Serializable{
             return false;
         }
     }
+    
 
     @Override
     public int hashCode() {
@@ -61,18 +71,38 @@ public class Disk implements Serializable{
         return hash;
     }
 
+    
+    /**
+     * Vrací barvu disku.
+     * @return true - bílý, black - černý
+     */
     public boolean isIsWhite() {
         return isWhite;
     }
-
+    
+    
+    /**
+     * Nastaví barvu disku.
+     * @param isWhite Barva disku
+     */
     public void setIsWhite(boolean isWhite) {
         this.isWhite = isWhite;
     }
 
+    
+    /**
+     * Vrátí informaci o tom, zda je disk zamrzlý.
+     * @return true - disk je zamrzlý
+     */
     public boolean isFreeze() {
         return isFreeze;
     }
 
+    
+    /**
+     * Nastaví disk na zamrzlý/rozmrzlý.
+     * @param isFreeze - true -> zmrazit, false -> rozmrazit
+     */
     public void setFreeze(boolean isFreeze) {
         this.isFreeze = isFreeze;
     }
