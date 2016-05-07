@@ -72,8 +72,8 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         freezTimeLeft = false;
         guiGame = game;
         int size = game.getBoard().getSize();
-        imageBigBlack = new ImageIcon(getClass().getResource("/img/BigBlack.png"));
-        imageBigWhite = new ImageIcon(getClass().getResource("/img/BigWhite.png"));
+        imageBigBlack = new ImageIcon(getClass().getResource("/img/bigBlack.png"));
+        imageBigWhite = new ImageIcon(getClass().getResource("/img/bigWhite.png"));
         imageMenuBlack = new ImageIcon(getClass().getResource("/img/black.png"));
         imageMenuWhite = new ImageIcon(getClass().getResource("/img/white.png"));
         imageFrBlack = new ImageIcon(getClass().getResource("/img/frBlack.png"));
