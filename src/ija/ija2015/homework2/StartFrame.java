@@ -397,7 +397,7 @@ public class StartFrame extends javax.swing.JFrame {
         if (evt.getClickCount() == 2) {
             int index = list.locationToIndex(evt.getPoint());
             String toLoad = (String) list.getModel().getElementAt(index);
-            System.out.println(toLoad);
+            // System.out.println(toLoad);
             Game game = Reversi.loadFromFile(toLoad);
             java.awt.EventQueue.invokeLater(() -> {
                 JFrame tmp = new GameFrame(game, false, null);

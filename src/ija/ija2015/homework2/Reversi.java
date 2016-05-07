@@ -93,7 +93,7 @@ public class Reversi {
         }
 
         for (int i = 0; i < folder.listFiles().length; i++) {
-            System.out.println(listOfFiles[i].getName());
+          //  System.out.println(listOfFiles[i].getName());
             if (listOfFiles[i].isFile()) {
                 result.add(listOfFiles[i].getName());
             }

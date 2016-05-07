@@ -145,7 +145,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                     try {
                         for (int j = 0; j < i; j++) {
                             sleep(1000);
-                            System.out.println("time to freeze: "+j);
+                           // System.out.println("time to freeze: "+j);
                         }
                         //sleep(1000);
                     } catch (InterruptedException ex) {
@@ -583,7 +583,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                 jLabelWinner.setText("DRAW!!!");
                 jLabelNextMove.setIcon(null);
             } else {
-                jLabelWinner.setText("WINNER!!!");
+                jLabelWinner.setText(" WINNER!!!");
                 if (game.getBoard().score()[0] > game.getBoard().score()[1]) {
                     jLabelNextMove.setIcon(imageMenuWhite);
                 } else {

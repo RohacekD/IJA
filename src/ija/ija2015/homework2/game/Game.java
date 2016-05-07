@@ -132,11 +132,11 @@ public class Game implements Serializable{
             ObjectOutputStream oos = new ObjectOutputStream(fout);
             oos.writeObject(this);
             oos.close();
-            System.out.println("Done");
+            //System.out.println("Done");
             return true;
 
         } catch (HeadlessException | IOException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
             return false;
         }
     }
@@ -155,7 +155,7 @@ public class Game implements Serializable{
                 do {
                     ok = false;
                     if (this.currentPlayer().getLegals(this.getBoard()).isEmpty()) {
-                        System.out.println("Neni kam hrat");
+                        //System.out.println("Neni kam hrat");
                         if (otherCantPlay) {
                             ended = true;
                             break;
@@ -165,7 +165,7 @@ public class Game implements Serializable{
                             break;
                         }
                     } else if ((this.currentPlayer.takenFromPool == this.getBoard().getRules().numberDisks())) {
-                        System.out.println("Dosly disky!");
+                        //System.out.println("Dosly disky!");
                         this.nextPlayer();
                         if (otherCantPlay) {
                             ended = true;
@@ -174,8 +174,8 @@ public class Game implements Serializable{
                         otherCantPlay = true;
                     } else {
                         otherCantPlay = false;
-                        System.out.println("tahne: " + this.currentPlayer().toString());
-                        System.out.println("Zadej X a pak Y");
+                        //System.out.println("tahne: " + this.currentPlayer().toString());
+                        //System.out.println("Zadej X a pak Y");
                         x = sc.nextInt();
                         if(x==100){
                             this.writeToFile("save.sv");
@@ -192,7 +192,7 @@ public class Game implements Serializable{
             } else {
 
                 if (this.currentPlayer().getLegals(this.getBoard()).isEmpty()) {
-                    System.out.println("Neni kam hrat");
+                    //System.out.println("Neni kam hrat");
                     if (otherCantPlay) {
                         ended = true;
                         break;
@@ -200,7 +200,7 @@ public class Game implements Serializable{
                     this.nextPlayer();
                     otherCantPlay = true;
                 } else if (this.currentPlayer.takenFromPool == this.getBoard().getRules().numberDisks()) {
-                    System.out.println("Dosly disky!");
+                    //System.out.println("Dosly disky!");
                     this.nextPlayer();
                     if (otherCantPlay) {
                         ended = true;
@@ -214,14 +214,14 @@ public class Game implements Serializable{
 
             }
             counts = this.getBoard().score();
-            System.out.println("bílý: " + counts[0] + " černý: " + counts[1]);
+            //System.out.println("bílý: " + counts[0] + " černý: " + counts[1]);
             this.getBoard().toString();
         }
-        System.out.println("HRA SKONCILA!");
+        //System.out.println("HRA SKONCILA!");
         if (counts[1] > counts[0]) {
-            System.out.println(">>>>BLACK WIN<<<<");
+           // System.out.println(">>>>BLACK WIN<<<<");
         } else {
-            System.out.println(">>>>WHITE WIN<<<<");
+           // System.out.println(">>>>WHITE WIN<<<<");
         }
     }
     

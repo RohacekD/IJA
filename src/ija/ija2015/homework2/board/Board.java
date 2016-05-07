@@ -128,7 +128,7 @@ public class Board implements Serializable {
     @Override
     public String toString() {
         String result = "";
-        System.out.println("Ahoj");
+       // System.out.println("Ahoj");
         int size = this.getSize();
         for (int i = 0; i < size + 2; i++) {
             for (int j = 0; j < size + 2; j++) {
