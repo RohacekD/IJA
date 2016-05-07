@@ -73,7 +73,6 @@ public class StartFrame extends javax.swing.JFrame {
         jLabelC = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jPanelHelp = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPaneLoad = new javax.swing.JScrollPane();
@@ -189,10 +188,6 @@ public class StartFrame extends javax.swing.JFrame {
         jLabel6.setText("s");
         jLabel6.setEnabled(false);
 
-        jLabel7.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel7.setText("s");
-        jLabel7.setEnabled(false);
-
         javax.swing.GroupLayout newGamePanelLayout = new javax.swing.GroupLayout(newGamePanel);
         newGamePanel.setLayout(newGamePanelLayout);
         newGamePanelLayout.setHorizontalGroup(
@@ -240,8 +235,7 @@ public class StartFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         newGamePanelLayout.setVerticalGroup(
@@ -278,9 +272,8 @@ public class StartFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(newGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jSpinnerC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelC)
-                            .addComponent(jLabel7))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                            .addComponent(jLabelC))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(jButtonPlay, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
         );
@@ -483,7 +476,6 @@ public class StartFrame extends javax.swing.JFrame {
             jLabelC.setEnabled(true);
             jLabel5.setEnabled(true);
             jLabel6.setEnabled(true);
-            jLabel7.setEnabled(true);
         }
         else{
             jSpinnerI.setEnabled(false);
@@ -494,7 +486,6 @@ public class StartFrame extends javax.swing.JFrame {
             jLabelC.setEnabled(false);
             jLabel5.setEnabled(false);
             jLabel6.setEnabled(false);
-            jLabel7.setEnabled(false);
         }
   
     }//GEN-LAST:event_jCheckBoxFreezActionPerformed
@@ -514,7 +505,6 @@ public class StartFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabelB;
     private javax.swing.JLabel jLabelC;
     private javax.swing.JLabel jLabelI;
