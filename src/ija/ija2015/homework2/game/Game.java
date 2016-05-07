@@ -45,15 +45,13 @@ public class Game implements Serializable{
      * @return Úspěch akce.
      */
     public boolean addPlayer(Player player) {
-        if ((this.whitePlayer != null) && (this.blackPlayer != null)) {
-            return false;
-        } else if (this.blackPlayer == null && player.isWhite() == false) {
+        if (this.blackPlayer == null && player.isWhite() == false) {
             this.blackPlayer = player;
             blackPlayer.init(this.board);
+            this.currentPlayer = player; /* ve hre Othello zacina cerny hrac */
             return true;
         } else if (this.whitePlayer == null && player.isWhite() == true) {
             this.whitePlayer = player;
-            this.currentPlayer = player;
             whitePlayer.init(this.board);
             return true;
         }

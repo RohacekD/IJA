@@ -182,7 +182,7 @@ public class Board implements Serializable {
      * @return Vrací ArrayList všech kamenů na desce. 
      */
     public ArrayList<Disk> disksOnBoard(){
-        ArrayList<Disk> dob = new ArrayList();
+        ArrayList<Disk> dob = new ArrayList<>();
         for (int i = 1; i < this.getSize() + 1; i++) {
             for (int j = 1; j < this.getSize() + 1; j++) {
                 if (!this.desk[i][j].isEmpty()) {

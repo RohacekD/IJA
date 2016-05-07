@@ -35,9 +35,12 @@ public class ArtificialIntelligence {
      * Výber vhodného pole pomocí metody MinMax
      * @param board Herní deska.
      * @param plr   Hráč který má udělat tah.
+     * @param depth Hloubka, v níž jsme zanořeni.
+     * @param game  Hra, pro kterou provádíme minimax.
+     * @param color Barva hráče, pro kterou provádím minimax.
      * @return Nalezené vhodné pole.
      */
-    public static Field minMaxAI(Board board, Player plr, int depth, Game game, boolean color, boolean first) {
+    public static Field minMaxAI(Board board, Player plr, int depth, Game game, boolean color) {
         int maxDepth = 5;
        
         // dosahli jsme maximalni hloubky
@@ -66,7 +69,7 @@ public class ArtificialIntelligence {
     
             game.setCurrentPlayer(plr);
             //minmax pro druheho hrace
-            Field nextMove = minMaxAI(boardTmp, game.nextPlayer(), depth + 1, game, color, false);
+            Field nextMove = minMaxAI(boardTmp, game.nextPlayer(), depth + 1, game, color);
             
             //jsem v maximalni hloubce, nebo korenovem listu
             if (nextMove == null) {
