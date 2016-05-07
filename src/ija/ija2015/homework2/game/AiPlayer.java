@@ -40,8 +40,6 @@ public class AiPlayer extends Player implements Serializable{
             case minMax:
                 boolean playerColor = game.currentPlayer().white;
                 tmp = ArtificialIntelligence.minMaxAI(game.getBoard(), this, 0, game, this.white, true);
-                System.out.println("puvodni deska");
-                game.getBoard().toString();
                 game.setPlayerWithColor(playerColor);
                 if(tmp != null)
                     if (canPutDisk(tmp))
