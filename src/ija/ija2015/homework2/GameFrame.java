@@ -192,11 +192,20 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
      * Pokud ano, všechny disky odmrazí.
      */
     void unfreezeAll(){
-        if(freez && freezTimeLeft)
-        for (Disk tmp : guiGame.getBoard().disksOnBoard()) {
-            if (tmp.isFreeze()) {
-                tmp.setFreeze(false);
+        if (freez && freezTimeLeft) {
+            for (Disk tmp : guiGame.getBoard().disksOnBoard()) {
+                if (tmp.isFreeze()) {
+                    tmp.setFreeze(false);
+                }
             }
+            freezTimeLeft = false;
+            new Thread() {
+                @Override
+                public void run() {
+                    freeze();
+                }
+            }.start();
+        
         }
     }
 
