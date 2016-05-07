@@ -7,20 +7,30 @@ import ija.ija2015.homework2.game.Game;
 import ija.ija2015.homework2.game.Player;
 import ija.ija2015.homework2.game.Player.Ai;
 import ija.ija2015.homework2.game.ReversiRules;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
+ * Spustitelná část celé aplikace. Obsahuje metody pro spuštění jak grafické,
+ * tak konzolové verze programu. CLI verze nepodporuje zamrzání.
  *
  * @author xjelin42, xpavlu08
  */
 public class Reversi {
 
+    /**
+     * Tato metoda vytvoří hru pro CLI.
+     *
+     * @param size velikost hry.
+     * @param p1Ai Inteligence bílého hráče.
+     * @param p2Ai Inteligence čeného hráče.
+     * @return
+     */
     public static Game createNewGame(int size, Ai p1Ai, Ai p2Ai) {
 
         Player p1, p2;
@@ -48,6 +58,12 @@ public class Reversi {
         return game;
     }
 
+    /**
+     * Tato metoda umožní načíst uloženou hru ze souboru.
+     *
+     * @param name Název uložené hry.
+     * @return Načtené hra nebo null v případě selhání.
+     */
     public static Game loadFromFile(String name) {
         Game game;
         try {
@@ -60,7 +76,7 @@ public class Reversi {
             return game;
 
         } catch (Exception ex) {
-             JOptionPane.showMessageDialog(null, "Incompatible file", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Incompatible file", "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -85,6 +101,10 @@ public class Reversi {
         return result;
     }
 
+    /**
+     * Metoda se pokusí nastavit vzhled okna a poté spustí grafické menu
+     * aplikace.
+     */
     public static void runMenu() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -93,32 +113,29 @@ public class Reversi {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(StartFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
 
+            @Override
+            public void run() {
                 JFrame tmp = new StartFrame();
                 tmp.setLocationRelativeTo(null);
                 tmp.setVisible(true);
-
+                tmp.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/icon.png")));
             }
         });
     }
 
     public static void main(String[] args) {
-
+        // GUI variance
         runMenu();
-        //Game game = createNewGame(6, Ai.human, Ai.rand);
 
+        //varianta nové hry CLI
+        //Game game = createNewGame(6, Ai.human, Ai.rand);
+        //varianta načtení ze souboru CLI
         //Game game = loadFromFile("save.sv");
         //game.play();
     }

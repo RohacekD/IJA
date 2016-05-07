@@ -48,14 +48,15 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
     private boolean freez;
 
     /**
-     * Konstruktor okna převezme instanci třídy Game a nastavi všechny grafické
+     * Konstruktor okna převezme instanci třídy Game a nastaví všechny grafické
      * náležitosti. Na základe velikosti hrací plochy zvolí vhodnou velikost
      * ikon, naplní jPanel tlačítky a vykleslí je na základě stavu (logické)
      * desky. Pokud je na tahu hráč s UI, Udělá první tah. Pokud je aktovováno
      * zamrzání, spustí odpočet času do zamrznutí.
      *
-     * @param game instance hry.
+     * @param game Instance hry.
      * @param freez Informace, zda bude prováděno zamrzání.
+     * @param frVal Tříprvkové pole s informacemi o zamrzání ve tvaru {i,b,c}
      */
     public GameFrame(Game game, boolean freez, int[] frVal) {
         super();
@@ -67,10 +68,6 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         this.freez = freez;
         freezTimeLeft = false;
         guiGame = game;
-        if (guiGame.getBlackPlayer().getInteligence() != Ai.human
-                && guiGame.getWhitePlayer().getInteligence() != Ai.human) {
-            this.jButtonUndo.setEnabled(false);
-        }
         int size = game.getBoard().getSize();
         imageBigBlack = new ImageIcon(getClass().getResource("/img/BigBlack.png"));
         imageBigWhite = new ImageIcon(getClass().getResource("/img/BigWhite.png"));
@@ -146,7 +143,11 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                     int b = rn.nextInt(frVal[1]);
                     int c = frVal[2];
                     try {
-                        sleep(i * 1000);
+                        for (int j = 0; j < i; j++) {
+                            sleep(1000);
+                            System.out.println("time to freeze: "+j);
+                        }
+                        //sleep(1000);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -154,6 +155,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                     Collections.shuffle(dob);
                     if (dob.size() <= c) {
                         c = dob.size();
+                        ended = true;
                     }
                     for (int j = 0; j < c; j++) {
                         dob.get(j).setFreeze(true);
@@ -214,7 +216,6 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                 guiGame.nextPlayer();
                 if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty() || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
                     guiGame.nextPlayer();
-                    unfreezeAll();
                     otherCantPlay = true;
 
                 }
@@ -222,7 +223,6 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
             } else if (guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
                 System.out.println("Dosly disky!");
                 guiGame.nextPlayer();
-                unfreezeAll();
                 if (otherCantPlay) {
                     ended = true;
                     System.out.println("KONEC - UI move");
@@ -232,11 +232,9 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
             } else {
                 guiGame.currentPlayer().putDisk(guiGame);
                 guiGame.nextPlayer();
-                unfreezeAll();
                 otherCantPlay = false;
                 if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty() || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
                     guiGame.nextPlayer();
-                    unfreezeAll();
                     otherCantPlay = true;
 
                 }
@@ -249,10 +247,11 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
     }
 
     /**
-     * Tah uživatele. Metoda převezme souřadnice a pokusí se na ně umísit kámen
+     * Tah uživatele. Metoda převezme souřadnice a pokusí se na ně umísit kámen.
      * Pokud aktuální hráč nemá kam táhnout nebo mu došly disky, předá tah
-     * následijícímu hráč a pokusí se spustit modul umělé inteigence. Ten se ale
-     * spustí jen za předpokladu, že následujícím hráčem je skutečně počítač.
+     * následijícímu hráči a pokusí se spustit modul umělé inteigence. Ten se
+     * ale spustí jen za předpokladu, že následujícím hráčem je skutečně
+     * počítač.
      *
      * @param x X souřadnice tahu.
      * @param y Y souřadnice tahu.
@@ -264,7 +263,6 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                         || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()){
                     //nemám disky nebo nemám kam hrát
                     guiGame.nextPlayer();
-                    unfreezeAll();
                     otherCantPlay = true;
                     }
                 else{ //muzu polozit a tak polozím
@@ -401,7 +399,6 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         jLabelBlackOnBoard.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabelNextMove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/white.png"))); // NOI18N
-        jLabelNextMove.setText("jLabel1");
         jLabelNextMove.setPreferredSize(new java.awt.Dimension(80, 80));
 
         jLabelWinner.setFont(new java.awt.Font("Vafle VUT", 0, 24)); // NOI18N
@@ -578,16 +575,28 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         if(game.currentPlayer().isWhite()){
             jLabelNextMove.setIcon(imageMenuWhite);
         }
-        else jLabelNextMove.setIcon(imageMenuBlack);
-        if(ended){
-            jLabelWinner.setText("WINNER!!!");
-            if(game.getBoard().score()[0]>game.getBoard().score()[1])
-                jLabelNextMove.setIcon(imageMenuWhite);
-            else jLabelNextMove.setIcon(imageMenuBlack);
+        else
+            jLabelNextMove.setIcon(imageMenuBlack);
+        if (ended) {
+            int score[] = game.getBoard().score();
+            if (score[0] == score[1]) {
+                jLabelWinner.setText("DRAW!!!");
+                jLabelNextMove.setIcon(null);
+            } else {
+                jLabelWinner.setText("WINNER!!!");
+                if (game.getBoard().score()[0] > game.getBoard().score()[1]) {
+                    jLabelNextMove.setIcon(imageMenuWhite);
+                } else {
+                    jLabelNextMove.setIcon(imageMenuBlack);
+                }
+            }
             this.jButtonUndo.setEnabled(false);
         }
     }
-    
+    /**
+     * Provede krok zpět ve hře.
+     * @param player Hráč, který je na tahu při volání.
+     */
     public void doUndo(Player player) {
         if (player.getUndo().canUndo()) {
             player.undo();
@@ -611,7 +620,13 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         }
       
     }//GEN-LAST:event_jButtonUndoActionPerformed
-
+    /**
+     * Listener tlačítka pro ukládání. Požádá uživatele o zadání jména hry.
+     * Pokud uživatel ponechá jméno prázdné, vyvolá chybové hlášení a uložení
+     * neporvede.
+     *
+     * @param evt Action performed
+     */
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
         String name = JOptionPane.showInputDialog(null, "Insert name of game", "Save game", JOptionPane.OK_CANCEL_OPTION);
         if(!"".equals(name)) guiGame.writeToFile(name);
@@ -638,11 +653,16 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
-
+    /**
+     * Listener tlačítka (políčka) na hrací desce. Pokud po vykonání akce nad
+     * tlačítkem se pokusí udělat tah.
+     *
+     * @param e Událost.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         SituatedButton tmp = (SituatedButton) e.getSource();
         makeUserMove(tmp.getXpos() + 1, tmp.getYpos() + 1);
-        System.out.println(tmp.getXpos() + 1 + ", " + 1 + tmp.getYpos());
+        //   System.out.println(tmp.getXpos() + 1 + ", " + 1 + tmp.getYpos());
     }
 }

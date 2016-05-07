@@ -52,8 +52,9 @@ public class Board implements Serializable {
     
     
     /**
-     * Copy konstruktor desky, jenž provádí hlubokou kopii. Využívá se při simulaci
-     * pohzbů u minimaxu.
+     * Copy konstruktor desky, jenž provádí hlubokou kopii. Využívá se při
+     * simulaci pohzbů u minimaxu.
+     *
      * @param board deska, která se kopíruje
      */
     public Board(Board board) {
