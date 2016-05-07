@@ -35,7 +35,7 @@ public abstract class Player implements Serializable{
         countOfDisk = 0;
         toTurnOver = new ArrayList<>();
         legals = new ArrayList<>();
-        undo = new Undo();
+        undo = new Undo(4);
     }
     
     

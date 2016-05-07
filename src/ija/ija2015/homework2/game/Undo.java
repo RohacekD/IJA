@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ija.ija2015.homework2.game;
 
 import ija.ija2015.homework2.board.Disk;
@@ -10,54 +5,86 @@ import ija.ija2015.homework2.board.Field;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+
 /**
- *
- * @author Honza
+ * Třída reprezentující objekt typu undo
+ * @author xjelin42, xpavlu08
  */
 public class Undo implements Serializable{
     
-    ArrayList<Field>[] fields;
+    Field[] field;
     ArrayList<Disk>[] turnedDisks;
     int putHere;
+    int depth;
     
+    
+    /**
+     * Konstruktor třídy Undo inicializuje objekt. Player předá objektu počet tahů,
+     * které se budou pamatovat.
+     * @param depth Hloubka, do které se budou tahy moci revertovat
+     */
     @SuppressWarnings("unchecked")
-    public Undo() {
-        fields = (ArrayList<Field>[])new ArrayList[3];
-        turnedDisks = (ArrayList<Disk>[]) new ArrayList[3];
+    public Undo(int depth) {
+        field = new Field[depth];
+        turnedDisks = (ArrayList<Disk>[]) new ArrayList[depth];
         putHere = 0;
+        this.depth = depth;
         
-        for (int i = 0; i < 3; i++) {
-            fields[i] = new ArrayList<>();
+        for (int i = 0; i < depth; i++) {
             turnedDisks[i] = new ArrayList<>();
+            field[i] = null;
         }
     }
     
     
+    /**
+     * Funkce kontroluje, zda můžeme tah navrátit zpět
+     * @return tru, poku je možné vrátit tah
+     */
     public boolean canUndo() {
         boolean isPossible = false;
-        for (int i = 0; i < 3; i++) {
-            if (fields[i].size() != 0) isPossible = true;
+        for (int i = 0; i < depth; i++) {
+            if (field[i] != null) isPossible = true;
         }
         return isPossible;
     }
     
+    
+    /**
+     * Funce přidá do pole turnedDisks seznam disků, které se budou otáčet.
+     * Do pole field přidá poslední použité políčko, z nějž se odebere disk.
+     * 
+     * @param field Políčko, ze kterého se při operaci undo odstraní disk
+     * @param list Seznam disků, které se při operaci undo budou přetáčet
+     */
     public void addToUndoLists(Field field, ArrayList<Disk> list) {
-        if (!this.fields[putHere].isEmpty()) this.fields[putHere].clear();
+        if (this.field[putHere] != null) this.field[putHere] = null;
         if (!this.turnedDisks[putHere].isEmpty()) this.turnedDisks[putHere].clear();
         
-        this.fields[putHere].add(field);
+        this.field[putHere] = field;
         this.turnedDisks[putHere].addAll(list);
         
-        this.putHere = (this.putHere + 1) % 3;
+        this.putHere = (this.putHere + 1) % depth;
     }
     
     
+    /**
+     * Nastaví ukazatel na předchozí prvek v polích s disky a políčky
+     */
     void setToPrevious() {
         this.putHere--;
         if (this.putHere == -1)
-            this.putHere = 2;
+            this.putHere = this.depth-1;
     }
     
+    
+    /**
+     * Provede reverzi posledního tahu. Hráči navíc navrátí disk.
+     * @param pos Pozice v hráčově poli disků, na kterou se přidělí disk
+     * @param color Barva, kterou bude mít nový disk
+     * @param pool pole hráčových disků
+     * @return tru, pokud se operace undo vydařila
+     */
     public boolean undo(int pos, boolean color, Disk[] pool) {
         setToPrevious();
         
@@ -67,10 +94,9 @@ public class Undo implements Serializable{
             }
             this.turnedDisks[putHere].clear();
             
-            for (Field putThatDiskAway : this.fields[this.putHere]) {
-                putThatDiskAway.setDiskToNull();
-            }
-            this.fields[putHere].clear();
+            this.field[putHere].setDiskToNull();
+            
+            this.field[putHere] = null;
             
             pool[pos] = new Disk(color);
             return true;
