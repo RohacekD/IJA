@@ -429,8 +429,8 @@ public class StartFrame extends javax.swing.JFrame {
             if (i == 0 || b == 0 || c == 0) {
                 JOptionPane.showMessageDialog(null, "Incompatible freezing value(s).\n Allowed values are between 1-1000 second.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
-            } else if ((Ai) jComboBoxWhite.getSelectedItem() != Ai.human || (Ai) jComboBoxBlack.getSelectedItem() != Ai.human) {
-                JOptionPane.showMessageDialog(null, "Freezing is allowed only for human vs. human mode.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else if ((Ai) jComboBoxWhite.getSelectedItem() == Ai.minMax || (Ai) jComboBoxBlack.getSelectedItem() == Ai.minMax) {
+                JOptionPane.showMessageDialog(null, "Freezing is not allowed in miniMax mode.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             } else {
                 freez = true;

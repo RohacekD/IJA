@@ -46,6 +46,8 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
     private SwingWorker aiWorker;
     private boolean freezTimeLeft;
     private boolean freez;
+    int[] frVal;
+    
 
     /**
      * Konstruktor okna převezme instanci třídy Game a nastaví všechny grafické
@@ -61,6 +63,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
     public GameFrame(Game game, boolean freez, int[] frVal) {
         super();
         initComponents();
+        this.frVal = frVal;
         if ((game.getBlackPlayer().getInteligence() != Ai.human && game.getWhitePlayer().getInteligence() != Ai.human) || freez) {
             //pokud hrají dvě uměle inteligence nebo je aktivní zamrzaní, nelze provádět undo
             jButtonUndo.setEnabled(false);
@@ -138,49 +141,50 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
             new Thread() {
                 @Override
                 public void run() {
-                    Random rn = new Random();
-                    int i = rn.nextInt(frVal[0]);
-                    int b = rn.nextInt(frVal[1]);
-                    int c = frVal[2];
-                    try {
-                        for (int j = 0; j < i; j++) {
-                            sleep(1000);
-                           // System.out.println("time to freeze: "+j);
-                        }
-                        //sleep(1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    ArrayList<Disk> dob = guiGame.getBoard().disksOnBoard();
-                    Collections.shuffle(dob);
-                    if (dob.size() <= c) {
-                        c = dob.size();
-                        ended = true;
-                    }
-                    for (int j = 0; j < c; j++) {
-                        dob.get(j).setFreeze(true);
-                    }
-
-                    SwingUtilities.invokeLater(() -> {
-                        updateGui(guiGame);
-                    });
-                    try {
-                        sleep(b * 1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    freezTimeLeft = true;
+                    freeze();
                 }
             }.start();
 
         }
-
-        if (freez) {
-            System.out.println(frVal[0]);
-            System.out.println(frVal[1]);
-            System.out.println(frVal[2]);
+    }
+    
+    public void freeze(){
+    
+        Random rn = new Random();
+        int i = rn.nextInt(frVal[0]);
+        int b = rn.nextInt(frVal[1]);
+        int c = frVal[2];
+        try {
+            for (int j = 0; j < i; j++) {
+                sleep(1000);
+              //  System.out.println("time to freeze: "+(i-j));
+            }
+            //sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ArrayList<Disk> dob = guiGame.getBoard().disksOnBoard();
+        Collections.shuffle(dob);
+        if (dob.size() <= c) {
+            c = dob.size();
+            ended = true;
+        }
+        for (int j = 0; j < c; j++) {
+            dob.get(j).setFreeze(true);
         }
 
+        SwingUtilities.invokeLater(() -> {
+            updateGui(guiGame);
+        });
+        try {
+            for (int j = 0; j < b; j++) {
+                sleep(1000);
+             //   System.out.println("time to unfreeze: " + (b - j));
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        freezTimeLeft = true;
     }
     
     /**
@@ -231,6 +235,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
                 otherCantPlay = true;
             } else {
                 guiGame.currentPlayer().putDisk(guiGame);
+                unfreezeAll();
                 guiGame.nextPlayer();
                 otherCantPlay = false;
                 if (guiGame.currentPlayer().getLegals(guiGame.getBoard()).isEmpty() || guiGame.currentPlayer().getTakenFromPool() == guiGame.getBoard().getRules().numberDisks()) {
