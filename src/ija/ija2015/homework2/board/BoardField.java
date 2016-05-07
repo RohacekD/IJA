@@ -18,8 +18,8 @@ public class BoardField implements Field, Serializable {
     /**
      * Inicializuje pole.
      *
-     * @param row
-     * @param cols
+     * @param row Počet řádků.
+     * @param cols Počet sloupců.
      */
     public BoardField(int row, int cols) {
         this.row = row;

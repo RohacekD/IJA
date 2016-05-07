@@ -201,7 +201,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
      * "přemýšlí", poté učiní tah a přepne aktivního hráče. Toto dělá, dokud
      * není na tahu hráč typu human.
      *
-     * @throws InterruptedException
+     * @throws InterruptedException Přerušení.
      */
     public void makeMove() throws InterruptedException {
         while (guiGame.currentPlayer().getInteligence() != Ai.human && !ended) {

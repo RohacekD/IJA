@@ -29,7 +29,7 @@ public class Reversi {
      * @param size velikost hry.
      * @param p1Ai Inteligence bílého hráče.
      * @param p2Ai Inteligence čeného hráče.
-     * @return
+     * @return Instance připravené hry.
      */
     public static Game createNewGame(int size, Ai p1Ai, Ai p2Ai) {
 

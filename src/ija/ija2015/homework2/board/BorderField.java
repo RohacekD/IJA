@@ -84,7 +84,7 @@ public class BorderField implements Field, Serializable {
 
     /**
      * Nedělá nic - hraninímu políčkuohodnocení nenastavuji
-     * @param value 
+     * @param value Hodnota.
      */
     @Override
     public void setRating(int value) {

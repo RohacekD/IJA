@@ -101,7 +101,7 @@ public class Disk implements Serializable{
     
     /**
      * Nastaví disk na zamrzlý/rozmrzlý.
-     * @param isFreeze - true -> zmrazit, false -> rozmrazit
+     * @param isFreeze - true = zmrazit, false = rozmrazit
      */
     public void setFreeze(boolean isFreeze) {
         this.isFreeze = isFreeze;

@@ -62,7 +62,7 @@ public interface Field {
     
     /**
      * Nastaví hodnocení políčka pro minimax
-     * @param value 
+     * @param value Hodnota.
      */
     void setRating(int value);
     

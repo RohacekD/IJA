@@ -19,7 +19,7 @@ public class Board implements Serializable {
     /**
      * Inicializuje desku.
      *
-     * @param rules
+     * @param rules Pravidla hry.
      */
     public Board(Rules rules) {
         this.rules = rules;
