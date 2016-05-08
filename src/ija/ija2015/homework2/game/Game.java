@@ -71,7 +71,8 @@ public class Game implements Serializable{
     
     
     /**
-     *  Vrátí bílého hráče.
+     * Vrátí bílého hráče.
+     *
      * @return Bílý hráč
      */
     public Player getWhitePlayer() {
@@ -81,17 +82,18 @@ public class Game implements Serializable{
     
     /**
      * Vrátí černého hráče.
+     *
      * @return Černý hráč
      */
     public Player getBlackPlayer() {
         return blackPlayer;
     }
     
-    
     /**
-     * Nastaví aktuálního hráče na hráče, který je předán jako parametr.
-     * Využívá se pouze u AI u minimaxu.
-     * @param currentPlayer Hráč, jenž bude nastaven jako aktuální
+     * Nastaví aktuálního hráče na hráče, který je předán jako parametr. Využívá
+     * se pouze u AI u minimaxu.
+     *
+     * @param currentPlayer Hráč, jenž bude nastaven jako aktuální.
      */
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -115,8 +117,9 @@ public class Game implements Serializable{
     
     /**
      * Funkce slouží k zápisu do souboru.
-     * @param name  Název souboru
-     * @return true, pokud se podařil zápis
+     *
+     * @param name Název souboru.
+     * @return True, pokud se podařil zápis.
      */
     public boolean writeToFile(String name) {
         try {
@@ -225,12 +228,11 @@ public class Game implements Serializable{
         }
     }
     
-    
     /**
-     * Nastaví aktuálního hráče na hráče, jenž má barvu, kterou funkce přebírá 
-     * parametrem. Využíváno pouze ve třídě AiPlayer v mětodě putDisk. 
+     * Nastaví aktuálního hráče na hráče, jenž má barvu, kterou funkce přebírá
+     * parametrem. Využíváno pouze ve třídě AiPlayer v mětodě putDisk.
      * Zajišťuje, aby po simulaci hry v minimaxu táhnul správný hráč.
-     * 
+     *
      * @param color Barva hráče
      */
     public void setPlayerWithColor(boolean color) {
@@ -250,7 +252,8 @@ public class Game implements Serializable{
     
     
     /**
-     * Vrátí referenci na hráče, jenž není zrovna aktuálním hráčem.
+     * Vrátí referenci na hráče, jenž není právě aktuálním hráčem.
+     *
      * @return hráč, který není na tahu
      */
     public Player getOtherPlayer() {

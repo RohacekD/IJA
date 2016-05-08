@@ -8,13 +8,16 @@ import java.util.Random;
 
 
 /**
- * Třída obsahuje statické metody, které reprezentují jednotlivé algoritmy umělé inteligence.
+ * Třída obsahuje statické metody, které reprezentují jednotlivé algoritmy umělé
+ * inteligence.
+ *
  * @author xpavlu08, xjelin42
  */
 public class ArtificialIntelligence {
     
     /**
      * Náhodný výběr vhodného pole pro tah.
+     *
      * @param board Herní deska.
      * @param plr Hráč který má udělat tah.
      * @return Nalezené pole.
@@ -32,11 +35,12 @@ public class ArtificialIntelligence {
     
     
     /**
-     * Výber vhodného pole pomocí metody MinMax
+     * Výber vhodného pole pomocí metody MinMax.
+     *
      * @param board Herní deska.
-     * @param plr   Hráč který má udělat tah.
+     * @param plr Hráč který má udělat tah.
      * @param depth Hloubka, v níž jsme zanořeni.
-     * @param game  Hra, pro kterou provádíme minimax.
+     * @param game Hra, pro kterou provádíme minimax.
      * @param color Barva hráče, pro kterou provádím minimax.
      * @return Nalezené vhodné pole.
      */
@@ -100,10 +104,12 @@ public class ArtificialIntelligence {
     
     
     /**
-     * Funkce vrací pro každé políčko, zda se na něj může hráč dostat
-     * @param f Políčko na desce
-     * @param color Barva hrace
-     * @return vrací true, pokud se nějakým tahem může hráč dané barvy dostat na dané políčko
+     * Funkce vrací pro každé políčko, informaci, zda se na něj může hráč dostat.
+     *
+     * @param f Políčko na desce.
+     * @param color Barva hráče.
+     * @return Vrací true, pokud se nějakým tahem může hráč dané barvy dostat na
+     * dané políčko.
      */
     public static boolean canMove(Field f, boolean color) {
         //v pripade prazdneho policka, souperova disku, nebo hrany
@@ -132,9 +138,10 @@ public class ArtificialIntelligence {
     
     /**
      * Funkce vypočítá mobilitu pro daného hráče
-     * @param board Deska, na níž se simuluje tah
-     * @param color Barva hrace
-     * @return vrací výslednou mobilitu hráče
+     *
+     * @param board Deska, na níž se simuluje tah.
+     * @param color Barva hráče.
+     * @return Vrací výslednou mobilitu hráče.
      */
     public static int getMobility(Board board, boolean color) {
         int mobility = 0;
@@ -148,11 +155,13 @@ public class ArtificialIntelligence {
     
     
     /**
-     * Funkce vypočítá heuristickou funkci pro desku se specifickými rozměry
-     * @param board Herní deska 
-     * @param evalTable Tabulka s ohodnocením pozic pro dané rozměry desky
-     * @param color Barva hráče
-     * @return funkce vrací výsledné ohodnocení desky při vložení disku na danou pozici
+     * Funkce vypočítá heuristickou funkci pro desku se specifickými rozměry.
+     *
+     * @param board Herní deska.
+     * @param evalTable Tabulka s ohodnocením pozic pro dané rozměry desky.
+     * @param color Barva hráče.
+     * @return Funkce vrací výsledné ohodnocení desky při vložení disku na danou
+     * pozici.
      */
     public static int getValueForSpecDesk(Board board, int[][] evalTable, boolean color) {
         int posValue = 0; //celkove ohodnoceni zaujatych pozic na desce
@@ -266,10 +275,12 @@ public class ArtificialIntelligence {
     
     
     /**
-     * Funkce udržuje tabulky výhodnosti pozice pro každý typ desky (6x6, 8x8, 10x10, 12x12)
-     * @param board Deska, na níž probíhá hra
-     * @param color Barva hráče
-     * @return vrací hodnotu výsledku provedení heristické funkce
+     * Funkce udržuje tabulky výhodnosti pozice pro každý typ desky (6x6, 8x8,
+     * 10x10, 12x12).
+     *
+     * @param board Deska, na níž probíhá hra.
+     * @param color Barva hráče.
+     * @return Vrací hodnotu výsledku provedení heristické funkce.
      */
     public static int getHeuristicValue(Board board, boolean color) {
         int size = board.getSize(); // podle velikosti desky se vybere pole hodnot        
@@ -347,11 +358,12 @@ public class ArtificialIntelligence {
     }
     
     /**
-     * Metoda vloží disk na konkrétní desku a políčko za vybraného hráče
-     * @param board Deska, na níž se vkládá disk
-     * @param field Políčko, na které se vkládá disk
-     * @param player Hráč, jenž vkládá disk
-     * @return vrací true, pokud se podařilo disk vložit
+     * Metoda vloží disk na konkrétní desku a políčko za vybraného hráče.
+     *
+     * @param board Deska, na níž se vkládá disk.
+     * @param field Políčko, na které se vkládá disk.
+     * @param player Hráč, jenž vkládá disk.
+     * @return Vrací true, pokud se podařilo disk vložit.
      */
     public static boolean putDiskAi(Board board, Field field, Player player) {
         int row, col;

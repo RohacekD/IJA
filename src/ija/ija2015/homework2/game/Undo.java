@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 
 /**
- * Třída reprezentující objekt typu undo
+ * Třída reprezentující objekt typu Undo.
+ *
  * @author xjelin42, xpavlu08
  */
 public class Undo implements Serializable{
@@ -19,9 +20,10 @@ public class Undo implements Serializable{
     
     
     /**
-     * Konstruktor třídy Undo inicializuje objekt. Player předá objektu počet tahů,
-     * které se budou pamatovat.
-     * @param depth Hloubka, do které se budou tahy moci revertovat
+     * Konstruktor třídy Undo inicializuje objekt. Player předá objektu počet
+     * tahů, které budou zapamatovány.
+     *
+     * @param depth Hloubka, do které se budou tahy moci revertovat.
      */
     @SuppressWarnings("unchecked")
     public Undo(int depth) {
@@ -38,8 +40,9 @@ public class Undo implements Serializable{
     
     
     /**
-     * Funkce kontroluje, zda můžeme tah navrátit zpět
-     * @return tru, poku je možné vrátit tah
+     * Funkce kontroluje, zda můžeme tah navrátit zpět.
+     *
+     * @return True, poku je možné vrátit tah.
      */
     public boolean canUndo() {
         boolean isPossible = false;
@@ -51,11 +54,11 @@ public class Undo implements Serializable{
     
     
     /**
-     * Funce přidá do pole turnedDisks seznam disků, které se budou otáčet.
-     * Do pole field přidá poslední použité políčko, z nějž se odebere disk.
+     * Funkce přidá do pole turnedDisks seznam disků, které se budou otáčet.
+     * Do pole field přidá poslední použité políčko, z něhož se odebere disk.
      * 
-     * @param field Políčko, ze kterého se při operaci undo odstraní disk
-     * @param list Seznam disků, které se při operaci undo budou přetáčet
+     * @param field Políčko, ze kterého se při operaci undo odstraní disk.
+     * @param list Seznam disků, které se při operaci undo budou přetáčet.
      */
     public void addToUndoLists(Field field, ArrayList<Disk> list) {
         if (this.field[putHere] != null) this.field[putHere] = null;
@@ -69,7 +72,7 @@ public class Undo implements Serializable{
     
     
     /**
-     * Nastaví ukazatel na předchozí prvek v polích s disky a políčky
+     * Nastaví ukazatel na předchozí prvek v polích s disky a políčky.
      */
     void setToPrevious() {
         this.putHere--;
@@ -80,10 +83,11 @@ public class Undo implements Serializable{
     
     /**
      * Provede reverzi posledního tahu. Hráči navíc navrátí disk.
-     * @param pos Pozice v hráčově poli disků, na kterou se přidělí disk
-     * @param color Barva, kterou bude mít nový disk
-     * @param pool pole hráčových disků
-     * @return tru, pokud se operace undo vydařila
+     *
+     * @param pos Pozice v hráčově poli disků, na kterou se přidělí disk.
+     * @param color Barva, kterou bude mít nový disk.
+     * @param pool Pole hráčových disků.
+     * @return True, pokud se operace undo vydařila.
      */
     public boolean undo(int pos, boolean color, Disk[] pool) {
         setToPrevious();

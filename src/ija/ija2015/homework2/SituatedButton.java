@@ -3,7 +3,7 @@ package ija.ija2015.homework2;
 import javax.swing.JButton;
 
 /**
- * Jbutton, který zná svou pozici v poli tlačetek grafického rozhraní.
+ * jButton, který zná svou pozici v poli tlačetek grafického rozhraní.
  *
  * @author xjelin42, xpavlu08
  */

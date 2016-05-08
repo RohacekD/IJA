@@ -3,8 +3,8 @@ package ija.ija2015.homework2.board;
 import java.io.Serializable;
 
 /**
- * Třída reprezentuje jeden kámen. Kámen může nabývat dvou barev - bílá nebo
- * černá.
+ * Třída reprezentující jeden kámen. Kámen může nabývat dvou barev - bílá nebo
+ * černá. Kámen může být též zmražen.
  *
  * @author xpavlu08, xjelin42
  */
@@ -28,6 +28,7 @@ public class Disk implements Serializable{
     
     /**
      * Copy konstruktor disku.
+     *
      * @param disk Disk ke zkopírování
      */
     public Disk(Disk disk) {
@@ -74,6 +75,7 @@ public class Disk implements Serializable{
     
     /**
      * Vrací barvu disku.
+     *
      * @return true - bílý, black - černý
      */
     public boolean isIsWhite() {
@@ -83,6 +85,7 @@ public class Disk implements Serializable{
     
     /**
      * Nastaví barvu disku.
+     *
      * @param isWhite Barva disku
      */
     public void setIsWhite(boolean isWhite) {
@@ -92,6 +95,7 @@ public class Disk implements Serializable{
     
     /**
      * Vrátí informaci o tom, zda je disk zamrzlý.
+     *
      * @return true - disk je zamrzlý
      */
     public boolean isFreeze() {
@@ -101,6 +105,7 @@ public class Disk implements Serializable{
     
     /**
      * Nastaví disk na zamrzlý/rozmrzlý.
+     *
      * @param isFreeze - true = zmrazit, false = rozmrazit
      */
     public void setFreeze(boolean isFreeze) {

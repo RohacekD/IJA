@@ -7,9 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Reprezentuje hráče hry. Hráč má bílou nebo černou barvu. Po vytvoření
- * reprezentuje volného hráče. Součástí hráče je sada kamenů, které má k
- * dispozici pro vkládání na desku. Volný hráč musí být inicializován v rámci
+ * Absraktní třída reprezentující hráče hry. Hráč má bílou nebo černou barvu. Po
+ * vytvoření reprezentuje volného hráče. Součástí hráče je sada kamenů, které má
+ * k dispozici pro vkládání na desku. Volný hráč musí být inicializován v rámci
  * hrací desky.
  *
  * @author xpavlu08, xjelin42
@@ -109,6 +109,7 @@ public abstract class Player implements Serializable{
     /**
      * Vratí ArrayList všech polí kam tento hráč může táhnout a nastaví aktuální
      * počet bílých a černých disků na hracím poli.
+     *
      * @param board Hrací deska.
      * @return ArrayList všech polí kam tento hráč může táhnout.
      */
@@ -162,7 +163,8 @@ public abstract class Player implements Serializable{
     
     /**
      * Abstraktní třída, kterou implementuje AiPlayer - provádí tahy
-     * @param game  Aktuální hra
+     *
+     * @param game Aktuální hra
      * @return vrací true, pokul lze vložit disk
      */
     public abstract boolean putDisk(Game game);
@@ -205,6 +207,7 @@ public abstract class Player implements Serializable{
     
     /**
      * Vraci typ inteligence hráče.
+     *
      * @return typ inteligence
      */
     public abstract Ai getInteligence();
@@ -212,6 +215,7 @@ public abstract class Player implements Serializable{
     
     /**
      * Vrátí informaci o barvě hráče.
+     *
      * @return string - barva hráče
      */
     @Override
@@ -227,6 +231,7 @@ public abstract class Player implements Serializable{
     
     /**
      * Vrací počet disku vybraných z hráčovy zásoby.
+     *
      * @return počet použitých disků
      */
     public int getTakenFromPool() {
@@ -235,8 +240,9 @@ public abstract class Player implements Serializable{
     
     
     /**
-     * Vrací seynam disků k otočení.
-     * @return seznam disků k otočení
+     * Vrací seznam disků k otočení.
+     *
+     * @return Seznam disků k otočení.
      */
     public ArrayList<Disk> getToTurnOver() {
         return toTurnOver;
@@ -244,9 +250,10 @@ public abstract class Player implements Serializable{
     
     
     /**
-     * Inicializuje objekt typu undo
-     * @param field Poslední políčko, na které byl vložen disk
-     * @param toTurn Seznam disků, které se otočily
+     * Inicializuje objekt typu undo.
+     *
+     * @param field Poslední políčko, na které byl vložen disk.
+     * @param toTurn Seznam disků, které se otočily.
      */
     void initUndo(Field field, ArrayList<Disk> toTurn) {
         this.undo.addToUndoLists(field, toTurn);
@@ -255,7 +262,8 @@ public abstract class Player implements Serializable{
     
     /**
      * Vrací desku do stavu před posledním tahem.
-     * @return true, pokud se podařilo tah vrátit
+     *
+     * @return True, pokud se podařilo tah vrátit.
      */
     public boolean undo() {
         if (this.undo.undo(takenFromPool - 1, this.white, this.pool)) {
@@ -267,8 +275,9 @@ public abstract class Player implements Serializable{
     
     
     /**
-     * getter pro Undo
-     * @return undo
+     * Getter pro Undo.
+     *
+     * @return Undo.
      */
     public Undo getUndo() {
         return undo;
@@ -276,7 +285,7 @@ public abstract class Player implements Serializable{
     
     
     /**
-     * výčet typů inteligence 
+     * výčet typů inteligence.
      */
     public static enum Ai {
 

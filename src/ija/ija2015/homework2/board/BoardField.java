@@ -37,6 +37,7 @@ public class BoardField implements Field, Serializable {
     /**
      * Copy konstruktor jedntotlivých políček na desce. Provádí hlubokou kopii.
      * Využívá ho konstruktor Boardu.
+     *
      * @param field Políčko ke zkopírování.
      */
     public BoardField(BoardField field) {
@@ -169,8 +170,8 @@ public class BoardField implements Field, Serializable {
 
     
     /**
-     * Získání informací o ohodnocení daného políčka.
-     * Využívá minimax.
+     * Získání informací o ohodnocení daného políčka. Využívá minimax.
+     *
      * @return ohodnocení políčka
      */
     @Override
@@ -181,6 +182,7 @@ public class BoardField implements Field, Serializable {
     
     /**
      * Nastavení ohodnocení políčka. Využívá minimax.
+     *
      * @param value Nová hodnota políčka
      */
     @Override
@@ -191,6 +193,7 @@ public class BoardField implements Field, Serializable {
     
     /**
      * Získá sloupec, na němž se políčko nachází.
+     *
      * @return číslo sloupce
      */
     @Override
@@ -201,6 +204,7 @@ public class BoardField implements Field, Serializable {
     
     /**
      * Získá řádek, na němž se políčko nachází.
+     *
      * @return číslo řádku
      */
     @Override

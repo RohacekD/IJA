@@ -58,14 +58,14 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
      *
      * @param game Instance hry.
      * @param freez Informace, zda bude prováděno zamrzání.
-     * @param frVal Tříprvkové pole s informacemi o zamrzání ve tvaru {i,b,c}
+     * @param frVal Tříprvkové pole s informacemi o zamrzání ve tvaru {i,b,c}.
      */
     public GameFrame(Game game, boolean freez, int[] frVal) {
         super();
         initComponents();
         this.frVal = frVal;
         if ((game.getBlackPlayer().getInteligence() != Ai.human && game.getWhitePlayer().getInteligence() != Ai.human) || freez) {
-            //pokud hrají dvě uměle inteligence nebo je aktivní zamrzaní, nelze provádět undo
+            //pokud hrají dvě uměle inteligence, nebo je aktivní zamrzaní, nelze provádět undo
             jButtonUndo.setEnabled(false);
         }
         this.freez = freez;
@@ -147,7 +147,13 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
 
         }
     }
-    
+    /**
+     * Funkce vygeneruje náhodné hodnoty ze zadaných intervalů vyčká náhodnou
+     * dobu, načte všechny aktuálně položené disky z desky, vybere daný počet z
+     * nich, a nastaví jim atribut zmražení. Poté spustí odpočet tvající
+     * náhodnou dobu a po jeho doběhnutí nastaví proměnnou informující o
+     * ukončení odpočtu na true.
+     */
     public void freeze(){
     
         Random rn = new Random();
@@ -157,9 +163,8 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         try {
             for (int j = 0; j < i; j++) {
                 sleep(1000);
-              //  System.out.println("time to freeze: "+(i-j));
+                //  System.out.println("time to freeze: "+(i-j));
             }
-            //sleep(1000);
         } catch (InterruptedException ex) {
             Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -179,7 +184,7 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         try {
             for (int j = 0; j < b; j++) {
                 sleep(1000);
-             //   System.out.println("time to unfreeze: " + (b - j));
+                //   System.out.println("time to unfreeze: " + (b - j));
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -552,8 +557,10 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Tato metoda projde logické pole hry a podle výsledků nastaví kameny a informační panel GUI.
-     * @param game 
+     * Tato metoda projde logické pole hry a podle výsledků nastaví kameny a
+     * informační panel GUI.
+     *
+     * @param game
      */
     private void updateGui(Game game){
         Field board[][] = game.getBoard().getDesk();
@@ -618,7 +625,10 @@ public class GameFrame extends javax.swing.JFrame implements ActionListener {
             updateGui(guiGame);
         }
     }
-    
+   /**
+    * Pokusí se udělat krok zpet.
+    * @param evt Stisknutí tlačítka Undo.
+    */ 
     private void jButtonUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUndoActionPerformed
         Player playerUndo;
         if (guiGame.getBlackPlayer().getInteligence() == Ai.human 

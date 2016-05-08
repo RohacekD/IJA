@@ -50,36 +50,37 @@ public interface Field {
     /**
      * Vrací informaci o tom, zda je pole prázdné.
      *
-     * @return Vrací TRUE, jestliže je políčko prázdné
+     * @return Vrací TRUE, jestliže je políčko prázdné.
      */
     boolean isEmpty();
     
     /**
-     * Vrací ohodnocení políčka pro minimax
-     * @return Ohodnocení políčka
+     * Vrací ohodnocení políčka pro minimax.
+     * @return Ohodnocení políčka.
      */
     int getRating();
     
     /**
-     * Nastaví hodnocení políčka pro minimax
+     * Nastaví hodnocení políčka pro minimax.
+     *
      * @param value Hodnota.
      */
     void setRating(int value);
     
     /**
-     * vrati cislo sloupce
-     * @return cislo sloupce
+     * Vrátí číslo sloupce
+     * @return Číslo sloupce.
      */
     int getColumn();
     
     /**
-     * vrati cislo radku
-     * @return cislo radku
+     * Vrátí číslo řádku.
+     * @return Číslo řádku.
      */
     int getRow();
     
     /**
-     * nastavuje disk na NULL - pro ucely UNDO 
+     * Nastavuje disk na NULL - pro účely UNDO. 
      */ 
     void setDiskToNull();
     

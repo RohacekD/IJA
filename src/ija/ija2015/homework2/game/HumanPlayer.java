@@ -12,7 +12,8 @@ public class HumanPlayer extends Player implements Serializable {
     
     /**
      * Konstruktor vytvoří hráče typu člověk.
-     * @param isWhite Barva hráče
+     *
+     * @param isWhite Barva hráče.
      */
     public HumanPlayer(boolean isWhite) {
         super(isWhite);
@@ -21,7 +22,8 @@ public class HumanPlayer extends Player implements Serializable {
     
     /**
      * Metoda vrací vždy false. Tuto metodu implemetuje AiPlayer.
-     * @param game  Hra, kterou hráč hraje.
+     *
+     * @param game Hra, kterou hráč hraje.
      * @return false
      */
     @Override
@@ -32,6 +34,7 @@ public class HumanPlayer extends Player implements Serializable {
     
     /**
      * Vrací typ inteligence hráče.
+     *
      * @return typ inteligence
      */
     @Override

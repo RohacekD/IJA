@@ -365,6 +365,7 @@ public class StartFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButNewGameActionPerformed
     /**
      * Po kliknutí na Load game zobrazí jScrollPane s výpisem uložených her.
+     *
      * @param evt Strisknutí tlačítka Load Game
      */
     private void jButtonLoadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoadGameActionPerformed
@@ -381,9 +382,10 @@ public class StartFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButtonLoadGameActionPerformed
     /**
-     * Po dvojkliku na hru se pokusí načíst hru ze souboru. Pokud se načtení zdaří,
-     * udělá vytvoří nový GameFrame, zobrazí jej a nastaví mu ikonu.
-     * @param evt 
+     * Po dvojkliku na hru se pokusí načíst hru ze souboru. Pokud se načtení
+     * zdaří, udělá vytvoří nový GameFrame, zobrazí jej a nastaví mu ikonu.
+     *
+     * @param evt
      */
     private void jListLoadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListLoadMouseClicked
         JList list = (JList) evt.getSource();
@@ -403,7 +405,7 @@ public class StartFrame extends javax.swing.JFrame {
      * Získa informace z nastavení a pokud odpovídají kriteriím, spustí hru. V
      * opačném případě vypíše chybové hlášení.
      *
-     * @param evt Stisknutí tlačítka play
+     * @param evt Stisknutí tlačítka Play.
      */
     private void jButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlayActionPerformed
         freez = false;

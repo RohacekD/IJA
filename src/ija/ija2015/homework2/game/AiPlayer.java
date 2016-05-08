@@ -4,6 +4,8 @@ import ija.ija2015.homework2.board.Field;
 import java.io.Serializable;
 
 /**
+ * Třída reprezentující hráče s umělou inteligencí. Oproti běžnému hráči
+ * disponuje možností položit disk pose se znalostí celého hracího pole.
  *
  * @author xjelin42, xpavlu08
  */
@@ -11,7 +13,8 @@ public class AiPlayer extends Player implements Serializable{
 
     private final Ai aiType;
     /**
-     * Převezme barvu hráče a typ jeho "inteligence"
+     * Konstruktor nastaví barvu hráče a typ jeho "inteligence".
+     *
      * @param isWhite Barva hráče.
      * @param in Typ inteligence.
      */
@@ -22,10 +25,11 @@ public class AiPlayer extends Player implements Serializable{
     
 
     /**
-     * Metoda převezme instanci hry a použije zvolený algoritmus k vyhodnocení pozice
-     * disku. Pokud byla pozice nalezena disk je umístěn.
+     * Metoda převezme instanci hry a použije zvolený algoritmus k vyhodnocení
+     * pozice disku. Pokud byla pozice nalezena disk je umístěn.
+     *
      * @param game Hra
-     * @return true pokud byl disk umístěn. Jinak false.
+     * @return True pokud byl disk umístěn. Jinak false.
      */
     @Override
     public boolean putDisk(Game game){

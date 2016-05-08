@@ -53,7 +53,7 @@ public class Board implements Serializable {
     
     /**
      * Copy konstruktor desky, jenž provádí hlubokou kopii. Využívá se při
-     * simulaci pohzbů u minimaxu.
+     * simulaci pohybů u minimaxu.
      *
      * @param board deska, která se kopíruje
      */
@@ -178,8 +178,10 @@ public class Board implements Serializable {
     
     
     /**
-     * Metoda projde herní pole a všechny aktuálně položené kameny vloží do seznamu.
-     * @return Vrací ArrayList všech kamenů na desce. 
+     * Metoda projde herní pole a všechny aktuálně položené kameny vloží do
+     * seznamu.
+     *
+     * @return Vrací ArrayList všech kamenů na desce.
      */
     public ArrayList<Disk> disksOnBoard(){
         ArrayList<Disk> dob = new ArrayList<>();

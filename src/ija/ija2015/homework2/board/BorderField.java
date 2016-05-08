@@ -75,6 +75,7 @@ public class BorderField implements Field, Serializable {
     
     /**
      * Ohodnoceni hraničního políčka je vždy 0
+     *
      * @return Vrací ohodnocení (0)
      */
     @Override
@@ -84,6 +85,7 @@ public class BorderField implements Field, Serializable {
 
     /**
      * Nedělá nic - hraninímu políčkuohodnocení nenastavuji
+     *
      * @param value Hodnota.
      */
     @Override
@@ -93,6 +95,7 @@ public class BorderField implements Field, Serializable {
     
     /**
      * Záměrně vrací špatnou hodnotu.
+     *
      * @return -1
      */
     @Override
@@ -102,6 +105,7 @@ public class BorderField implements Field, Serializable {
     
     /**
      * Záměrně vrací špatnou hodnotu.
+     *
      * @return -1
      */
     @Override
